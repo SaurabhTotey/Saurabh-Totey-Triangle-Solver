@@ -39,7 +39,7 @@ class Triangle{
      * Returns an array because solving for an ASS triangle with the law of sines may return two triangles
      */
     fun solution(): Array<Triangle>{
-        var solved = arrayOf(Triangle())
+        var solved = arrayOf(this.copy())
         when(this.type){
             SSS -> {
                 solved[0].angles[0] = acos((pow(solved[0].sides[1], 2.0) + pow(solved[0].sides[2], 2.0) - pow(solved[0].sides[0], 2.0)) / (2 * solved[0].sides[1] * solved[0].sides[2])) //Using the law of cosines
@@ -47,7 +47,11 @@ class Triangle{
                 solved[0].angles[2] = Math.PI - solved[0].angles[0] - solved[0].angles[1]  //Because all angles must add up to π
             }
             SAS -> {
-
+                val unknownSideIndex = arrayOf(0, 1, 2).filter{a -> this.sides[a] <= 0}[0]
+                val unknownAngleIndices = arrayOf(0, 1, 2).filter{a -> a != unknownSideIndex}
+                solved[0].sides[unknownSideIndex] = sqrt(pow(solved[0].sides[unknownAngleIndices[0]], 2.0) + pow(solved[0].sides[unknownAngleIndices[1]], 2.0) - 2 * solved[0].sides[unknownAngleIndices[0]] * solved[0].sides[unknownAngleIndices[1]] * cos(solved[0].angles[unknownSideIndex])) //Using the law of cosines
+                solved[0].angles[unknownAngleIndices[0]] = acos((pow(solved[0].sides[unknownAngleIndices[1]], 2.0) + pow(solved[0].sides[unknownSideIndex], 2.0) - pow(solved[0].sides[unknownAngleIndices[0]], 2.0) ) / (2 * solved[0].sides[unknownAngleIndices[1]] * solved[0].sides[unknownSideIndex])) //Using the law of cosines
+                solved[0].angles[unknownAngleIndices[1]] = Math.PI - solved[0].angles[unknownSideIndex] - solved[0].angles[unknownAngleIndices[0]]
             }
             AAA -> {
 
@@ -59,10 +63,20 @@ class Triangle{
 
             }
             ASS -> {
-                solved = arrayOf(Triangle(), Triangle())
+                solved = arrayOf(this.copy(), this.copy())
             }
         }
         return solved
+    }
+
+    /**
+     * Creates a copy of this triangle with the same initial properties
+     */
+    fun copy(): Triangle{
+        var clone = Triangle()
+        clone.sides = this.sides.copyOf()
+        clone.angles = this.angles.copyOf()
+        return clone
     }
 
 }
