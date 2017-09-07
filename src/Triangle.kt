@@ -1,10 +1,14 @@
+import java.lang.Math.*
 import java.util.*
+
+val hasBeenInitialized = {a: Double -> a > 0}
 
 /**
  * A class that defines a triangle
  * This is where all the math of the triangle is handled
+ * This logic class uses radians as do all people of logic
  */
-class Triangle(){
+class Triangle{
 
     /**
      * An array of all the sides
@@ -22,14 +26,42 @@ class Triangle(){
      */
     val type: TriangleType
         get() = TriangleType(this.sides, this.angles)
+    /**
+     * Whether the triangle has been solved completely
+     * Is dynamically calculated
+     */
+    val isSolved: Boolean
+        get() = this.sides.filter{a -> hasBeenInitialized(a)}.size == 3 && this.angles.filter{a -> hasBeenInitialized(a)}.size == 3
 
     /**
      * Returns a triangle with all of the sides and angles solved
      * Doesn't actually modify base triangle
      * Returns an array because solving for an ASS triangle with the law of sines may return two triangles
      */
-    fun solve(): Array<Triangle>{
+    fun solution(): Array<Triangle>{
         var solved = arrayOf(Triangle())
+        when(this.type){
+            SSS -> {
+                solved[0].angles[0] = acos((pow(solved[0].sides[1], 2.0) + pow(solved[0].sides[2], 2.0) - pow(solved[0].sides[0], 2.0)) / (2 * solved[0].sides[1] * solved[0].sides[2])) //Using the law of cosines
+                solved[0].angles[1] = acos((pow(solved[0].sides[0], 2.0) + pow(solved[0].sides[2], 2.0) - pow(solved[0].sides[1], 2.0)) / (2 * solved[0].sides[0] * solved[0].sides[2])) //Using the law of cosines
+                solved[0].angles[2] = Math.PI - solved[0].angles[0] - solved[0].angles[1]  //Because all angles must add up to π
+            }
+            SAS -> {
+
+            }
+            AAA -> {
+
+            }
+            ASA -> {
+
+            }
+            AAS -> {
+
+            }
+            ASS -> {
+                solved = arrayOf(Triangle(), Triangle())
+            }
+        }
         return solved
     }
 
@@ -38,7 +70,7 @@ class Triangle(){
 //Defines all triangle types below
 val SSS = TriangleType("SSS")
 val SAS = TriangleType("SAS")
-val AAA = TriangleType("AAA")
+val AAA = TriangleType("AAA") //Does not define a unique triangle
 val ASA = TriangleType("ASA")
 val AAS = TriangleType("AAS")
 val ASS = TriangleType("ASS") //Does not define a unique triangle
@@ -65,7 +97,6 @@ class TriangleType{
      * Uses the given parameters to figure out the type of triangle
      */
     constructor(sides: Array<Double>, angles: Array<Double>){
-        val hasBeenInitialized = {a: Double -> a > 0}
         val amtSides = sides.filter(hasBeenInitialized).size
         val amtAngles = angles.filter(hasBeenInitialized).size
         assert(amtSides + amtAngles >= 3)
