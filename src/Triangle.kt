@@ -39,6 +39,9 @@ class Triangle{
      * Returns an array because solving for an ASS triangle with the law of sines may return two triangles
      */
     fun solution(): Array<Triangle>{
+        fun getIndicesSuchThat(predicate: (Int) -> Boolean) : List<Int>{
+            return arrayOf(0, 1, 2).filter{a -> predicate(a)}
+        }
         var solved = arrayOf(this.copy())
         when(this.type){
             SSS -> {
@@ -47,14 +50,15 @@ class Triangle{
                 solved[0].angles[2] = Math.PI - solved[0].angles[0] - solved[0].angles[1]  //Because all angles must add up to π
             }
             SAS -> {
-                val unknownSideIndex = arrayOf(0, 1, 2).filter{a -> this.sides[a] <= 0}[0]
-                val unknownAngleIndices = arrayOf(0, 1, 2).filter{a -> a != unknownSideIndex}
+                val unknownSideIndex = getIndicesSuchThat{a -> this.sides[a] <= 0}[0]
+                val unknownAngleIndices = getIndicesSuchThat{a -> a != unknownSideIndex}
                 solved[0].sides[unknownSideIndex] = sqrt(pow(solved[0].sides[unknownAngleIndices[0]], 2.0) + pow(solved[0].sides[unknownAngleIndices[1]], 2.0) - 2 * solved[0].sides[unknownAngleIndices[0]] * solved[0].sides[unknownAngleIndices[1]] * cos(solved[0].angles[unknownSideIndex])) //Using the law of cosines
                 solved[0].angles[unknownAngleIndices[0]] = acos((pow(solved[0].sides[unknownAngleIndices[1]], 2.0) + pow(solved[0].sides[unknownSideIndex], 2.0) - pow(solved[0].sides[unknownAngleIndices[0]], 2.0) ) / (2 * solved[0].sides[unknownAngleIndices[1]] * solved[0].sides[unknownSideIndex])) //Using the law of cosines
                 solved[0].angles[unknownAngleIndices[1]] = Math.PI - solved[0].angles[unknownSideIndex] - solved[0].angles[unknownAngleIndices[0]]
             }
             AAA -> {
-
+                val smallestSide = getIndicesSuchThat{a -> solved[0].angles[a] == solved[0].angles.min()}[0]
+                solved[0].sides[smallestSide] = 1.0 //Because no sides are defined, the smallest side is then assumed to be 1
             }
             ASA -> {
 
@@ -98,14 +102,14 @@ class TriangleType{
      * An enum for the parts of a triangle
      */
     enum class Part{
-        SIDE, ANGLE
+        SIDE, ANGLE, UNKNOWN
     }
 
     /**
      * The type of the triangle this is
      * Contains 3 Parts
      */
-    var type: Array<Part>? = null
+    var type = Array(3, {_ -> Part.UNKNOWN})
 
     /**
      * Uses the given parameters to figure out the type of triangle
@@ -114,6 +118,7 @@ class TriangleType{
         val amtSides = sides.filter(hasBeenInitialized).size
         val amtAngles = angles.filter(hasBeenInitialized).size
         assert(amtSides + amtAngles >= 3)
+        //TODO rework below
         this.type = when(amtSides){
             3 ->
                 arrayOf(Part.SIDE, Part.SIDE, Part.SIDE)
@@ -135,15 +140,27 @@ class TriangleType{
      * Just makes a type based on the given string
      */
     constructor(stringType: String){
-        this.type = stringType.map{a -> if(a.toLowerCase() == 's') Part.SIDE else Part.ANGLE}.toTypedArray()
-        assert(this.type!!.size == 3)
+        this.type = stringType.map{
+            a -> when(a.toLowerCase()){
+                's' -> Part.SIDE
+                'a' -> Part.ANGLE
+                else -> Part.UNKNOWN
+            }
+        }.toTypedArray()
+        assert(this.type.size == 3)
     }
 
     /**
      * A string representation of this triangle type
      */
     override fun toString(): String {
-        return if(type != null) type!!.joinToString{a -> if(a == Part.SIDE) "S" else "A"} else "???"
+        return type.joinToString{
+            a -> when(a){
+                Part.SIDE -> "S"
+                Part.ANGLE -> "A"
+                Part.UNKNOWN -> "?"
+            }
+        }
     }
 
     /**
@@ -151,7 +168,7 @@ class TriangleType{
      * Accounts for palindromes
      */
     override fun equals(other: Any?): Boolean {
-        return other is TriangleType && (Arrays.equals(other.type, this.type) || Arrays.equals(other.type, this.type!!.reversedArray()))
+        return other is TriangleType && (Arrays.equals(other.type, this.type) || Arrays.equals(other.type, this.type.reversedArray()))
     }
 
 }
