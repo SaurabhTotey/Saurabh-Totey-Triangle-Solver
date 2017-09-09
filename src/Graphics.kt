@@ -1,6 +1,9 @@
-import net.miginfocom.swing.MigLayout
+import com.fathzer.soft.javaluator.DoubleEvaluator  //http://javaluator.sourceforge.net/en/home/ is used: https://opensource.org/licenses/lgpl-3.0.html
+import net.miginfocom.swing.MigLayout               //http://www.miglayout.com                   is used: https://opensource.org/licenses/lgpl-3.0.html
 import java.awt.Font
 import java.awt.GraphicsEnvironment
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
 import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.*
@@ -24,6 +27,7 @@ class MainWindow{
     private lateinit var frame: JFrame
     private lateinit var defaultFont: Font
     private lateinit var titleFont: Font
+    private val mathEngine = DoubleEvaluator()
     private val triangleDrawings: Array<TriangleDrawer> = arrayOf(TriangleDrawer(), TriangleDrawer())
     private var isInRads = true
 
@@ -54,7 +58,7 @@ class MainWindow{
             defaultFont = Font(Font.MONOSPACED, Font.PLAIN, screenX / 130)
 
             //Makes the angles pane which handles angle mode and conversions of angles
-            var anglesPane = JPanel(MigLayout("grow"))
+            var anglesPane = JPanel(MigLayout(""))
             //Below makes the mode which selects whether the triangle inputs should be inputted/outputted as radians or degrees
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
             var modeDropDownMenu = JComboBox(angleOptions)
@@ -64,7 +68,22 @@ class MainWindow{
             }
             anglesPane.add(modeDropDownMenu)
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
-            //TODO
+            var degreesConversionBox = JTextField()
+            var radiansConversionBox = JTextField()
+            degreesConversionBox.addKeyListener(object : KeyListener{
+
+                override fun keyPressed(p0: KeyEvent?) {} override fun keyReleased(p0: KeyEvent?) {}
+
+                override fun keyTyped(p0: KeyEvent?) {}
+
+            })
+            radiansConversionBox.addKeyListener(object : KeyListener{
+
+                override fun keyPressed(p0: KeyEvent?) {} override fun keyReleased(p0: KeyEvent?) {}
+
+                override fun keyTyped(p0: KeyEvent?) {}
+
+            })
             frame.add(anglesPane, "dock south")
 
             frame.isVisible = true
