@@ -1,7 +1,13 @@
 import java.lang.Math.*
 import java.util.*
 
-val hasBeenInitialized = {a: Double -> a > 0}
+val hasBeenInitialized = {a: Double -> a > 0} //A function that will return whether a triangle angle or side has been initialized
+/**
+ * A function that will return indices given a certain predicate
+ */
+fun getIndicesSuchThat(predicate: (Int) -> Boolean) : List<Int>{
+    return arrayOf(0, 1, 2).filter{a -> predicate(a)}
+}
 
 /**
  * A class that defines a triangle
@@ -39,26 +45,24 @@ class Triangle{
      * Returns an array because solving for an ASS triangle with the law of sines may return two triangles
      */
     fun solution(): Array<Triangle>{
-        fun getIndicesSuchThat(predicate: (Int) -> Boolean) : List<Int>{
-            return arrayOf(0, 1, 2).filter{a -> predicate(a)}
-        }
         var solved = arrayOf(this.copy())
+        var primary = solved[0]
         when(this.type){
             SSS -> {
-                solved[0].angles[0] = acos((pow(solved[0].sides[1], 2.0) + pow(solved[0].sides[2], 2.0) - pow(solved[0].sides[0], 2.0)) / (2 * solved[0].sides[1] * solved[0].sides[2])) //Using the law of cosines
-                solved[0].angles[1] = acos((pow(solved[0].sides[0], 2.0) + pow(solved[0].sides[2], 2.0) - pow(solved[0].sides[1], 2.0)) / (2 * solved[0].sides[0] * solved[0].sides[2])) //Using the law of cosines
-                solved[0].angles[2] = Math.PI - solved[0].angles[0] - solved[0].angles[1]  //Because all angles must add up to π
+                primary.angles[0] = acos((pow(primary.sides[1], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[0], 2.0)) / (2 * primary.sides[1] * primary.sides[2])) //Using the law of cosines
+                primary.angles[1] = acos((pow(primary.sides[0], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[1], 2.0)) / (2 * primary.sides[0] * primary.sides[2])) //Using the law of cosines
+                primary.angles[2] = Math.PI - primary.angles[0] - primary.angles[1]  //Because all angles must add up to π
             }
             SAS -> {
                 val unknownSideIndex = getIndicesSuchThat{a -> this.sides[a] <= 0}[0]
                 val unknownAngleIndices = getIndicesSuchThat{a -> a != unknownSideIndex}
-                solved[0].sides[unknownSideIndex] = sqrt(pow(solved[0].sides[unknownAngleIndices[0]], 2.0) + pow(solved[0].sides[unknownAngleIndices[1]], 2.0) - 2 * solved[0].sides[unknownAngleIndices[0]] * solved[0].sides[unknownAngleIndices[1]] * cos(solved[0].angles[unknownSideIndex])) //Using the law of cosines
-                solved[0].angles[unknownAngleIndices[0]] = acos((pow(solved[0].sides[unknownAngleIndices[1]], 2.0) + pow(solved[0].sides[unknownSideIndex], 2.0) - pow(solved[0].sides[unknownAngleIndices[0]], 2.0) ) / (2 * solved[0].sides[unknownAngleIndices[1]] * solved[0].sides[unknownSideIndex])) //Using the law of cosines
-                solved[0].angles[unknownAngleIndices[1]] = Math.PI - solved[0].angles[unknownSideIndex] - solved[0].angles[unknownAngleIndices[0]]
+                primary.sides[unknownSideIndex] = sqrt(pow(solved[0].sides[unknownAngleIndices[0]], 2.0) + pow(primary.sides[unknownAngleIndices[1]], 2.0) - 2 * primary.sides[unknownAngleIndices[0]] * primary.sides[unknownAngleIndices[1]] * cos(primary.angles[unknownSideIndex])) //Using the law of cosines
+                primary.angles[unknownAngleIndices[0]] = acos((pow(primary.sides[unknownAngleIndices[1]], 2.0) + pow(primary.sides[unknownSideIndex], 2.0) - pow(primary.sides[unknownAngleIndices[0]], 2.0) ) / (2 * primary.sides[unknownAngleIndices[1]] * primary.sides[unknownSideIndex])) //Using the law of cosines
+                primary.angles[unknownAngleIndices[1]] = Math.PI - primary.angles[unknownSideIndex] - primary.angles[unknownAngleIndices[0]]
             }
             AAA -> {
-                val smallestSide = getIndicesSuchThat{a -> solved[0].angles[a] == solved[0].angles.min()}[0]
-                solved[0].sides[smallestSide] = 1.0 //Because no sides are defined, the smallest side is then assumed to be 1
+                val smallestSide = getIndicesSuchThat{a -> primary.angles[a] == primary.angles.min()}[0]
+                primary.sides[smallestSide] = 1.0 //Because no sides are defined, the smallest side is then assumed to be 1
             }
             ASA -> {
 
@@ -115,24 +119,29 @@ class TriangleType{
      * Uses the given parameters to figure out the type of triangle
      */
     constructor(sides: Array<Double>, angles: Array<Double>){
-        val amtSides = sides.filter(hasBeenInitialized).size
-        val amtAngles = angles.filter(hasBeenInitialized).size
-        assert(amtSides + amtAngles >= 3)
-        //TODO rework below
-        this.type = when(amtSides){
-            3 ->
-                arrayOf(Part.SIDE, Part.SIDE, Part.SIDE)
-            2 -> //Checks if the side that isn't defined has a defined opposite angle; that makes the triangle SAS
-                if(angles[arrayOf(0, 1, 2).filter{a -> sides[a] <= 0}[0]] > 0)
-                    arrayOf(Part.SIDE, Part.ANGLE, Part.SIDE)
-                else
-                    arrayOf(Part.ANGLE, Part.SIDE, Part.SIDE)
-            1 -> //Checks if the
-                if(sides[arrayOf(0, 1, 2).filter{a -> angles[a] <= 0}[0]] > 0)
+        val initializedSides = getIndicesSuchThat{a -> hasBeenInitialized(sides[a])}
+        val initializedAngles = getIndicesSuchThat{a -> hasBeenInitialized(angles[a])}
+        assert(initializedSides.size + initializedAngles.size >= 3)
+        //Sets the type to the first applicable found triangle type; order is checked in terms of desirability (eg. least desirable types checked last)
+        //That way if a triangle fulfills the condition of a desirable type and an undesirable type, it will get checked against the desirable type first and thus become it
+        this.type = when(initializedSides.size){
+            3 -> arrayOf(Part.SIDE, Part.SIDE, Part.SIDE)
+            1 -> //1 is checked before 2 because 2 has the possibility of making an ASS triangle when a AAS triangle is possible, and ASS is the least desirable triangle
+                //If there are 3 angles and 1 side or if the side opposite the uninitialized angle is initialized, the triangle is ASA, otherwise it is AAS
+                if(initializedAngles.size == 3 || hasBeenInitialized(sides[getIndicesSuchThat{a -> a !in initializedAngles}[0]])){
                     arrayOf(Part.ANGLE, Part.SIDE, Part.ANGLE)
-                else
+                }else{
                     arrayOf(Part.ANGLE, Part.ANGLE, Part.SIDE)
-            else -> arrayOf(Part.ANGLE, Part.ANGLE, Part.ANGLE)
+                }
+            2 ->
+                //If the angle opposite the uninitialized side is initialized, the triangle is SAS, otherwise, it is ASS
+                if(hasBeenInitialized(angles[getIndicesSuchThat{a -> a !in initializedSides}[0]])){
+                    arrayOf(Part.SIDE, Part.ANGLE, Part.SIDE)
+                }else{
+                    arrayOf(Part.ANGLE, Part.SIDE, Part.SIDE)
+                }
+            0 -> arrayOf(Part.ANGLE, Part.ANGLE, Part.ANGLE)
+            else -> this.type
         }
     }
 
