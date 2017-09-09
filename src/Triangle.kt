@@ -47,6 +47,9 @@ class Triangle{
     fun solution(): Array<Triangle>{
         var solved = arrayOf(this.copy())
         var primary = solved[0]
+        fun reSolve(){
+            solved = primary.solution()
+        }
         when(this.type){
             SSS -> {
                 primary.angles[0] = acos((pow(primary.sides[1], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[0], 2.0)) / (2 * primary.sides[1] * primary.sides[2])) //Using the law of cosines
@@ -54,24 +57,28 @@ class Triangle{
                 primary.angles[2] = Math.PI - primary.angles[0] - primary.angles[1]  //Because all angles must add up to π
             }
             SAS -> {
-                val unknownSideIndex = getIndicesSuchThat{a -> this.sides[a] <= 0}[0]
+                val unknownSideIndex = getIndicesSuchThat{a -> !hasBeenInitialized(primary.sides[a])}[0]
                 val unknownAngleIndices = getIndicesSuchThat{a -> a != unknownSideIndex}
                 primary.sides[unknownSideIndex] = sqrt(pow(solved[0].sides[unknownAngleIndices[0]], 2.0) + pow(primary.sides[unknownAngleIndices[1]], 2.0) - 2 * primary.sides[unknownAngleIndices[0]] * primary.sides[unknownAngleIndices[1]] * cos(primary.angles[unknownSideIndex])) //Using the law of cosines
-                primary.angles[unknownAngleIndices[0]] = acos((pow(primary.sides[unknownAngleIndices[1]], 2.0) + pow(primary.sides[unknownSideIndex], 2.0) - pow(primary.sides[unknownAngleIndices[0]], 2.0) ) / (2 * primary.sides[unknownAngleIndices[1]] * primary.sides[unknownSideIndex])) //Using the law of cosines
-                primary.angles[unknownAngleIndices[1]] = Math.PI - primary.angles[unknownSideIndex] - primary.angles[unknownAngleIndices[0]]
+                reSolve() //Will solve the triangle as if it were SSS
             }
             AAA -> {
                 val smallestSide = getIndicesSuchThat{a -> primary.angles[a] == primary.angles.min()}[0]
                 primary.sides[smallestSide] = 1.0 //Because no sides are defined, the smallest side is then assumed to be 1
+                reSolve() //Will solve the triangle as if it were ASA
             }
             ASA -> {
-
+                //TODO solve this without calling reSolve(); either 1 or 2 sides already exist, and 2 or 3 angles already exist
             }
             AAS -> {
-
+                val unknownAngleIndex = getIndicesSuchThat{a -> !hasBeenInitialized(primary.angles[a])}[0]
+                val knownAngleIndices = getIndicesSuchThat{a -> a != unknownAngleIndex}
+                primary.angles[unknownAngleIndex] = Math.PI - primary.angles[knownAngleIndices[0]] - primary.angles[knownAngleIndices[1]]
+                reSolve() //Will solve the triangle as if it were ASA
             }
             ASS -> {
                 solved = arrayOf(this.copy(), this.copy())
+                //TODO solve this and give both possible solutions
             }
         }
         return solved
