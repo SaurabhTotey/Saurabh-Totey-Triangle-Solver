@@ -54,7 +54,7 @@ class Triangle{
             SSS -> {
                 primary.angles[0] = acos((pow(primary.sides[1], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[0], 2.0)) / (2 * primary.sides[1] * primary.sides[2])) //Using the law of cosines
                 primary.angles[1] = acos((pow(primary.sides[0], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[1], 2.0)) / (2 * primary.sides[0] * primary.sides[2])) //Using the law of cosines
-                primary.angles[2] = Math.PI - primary.angles[0] - primary.angles[1]  //Because all angles must add up to π
+                primary.angles[2] = PI - primary.angles[0] - primary.angles[1]  //Because all angles must add up to π
             }
             SAS -> {
                 val unknownSideIndex = getIndicesSuchThat{a -> !hasBeenInitialized(primary.sides[a])}[0]
@@ -73,7 +73,7 @@ class Triangle{
             AAS -> {
                 val unknownAngleIndex = getIndicesSuchThat{a -> !hasBeenInitialized(primary.angles[a])}[0]
                 val knownAngleIndices = getIndicesSuchThat{a -> a != unknownAngleIndex}
-                primary.angles[unknownAngleIndex] = Math.PI - primary.angles[knownAngleIndices[0]] - primary.angles[knownAngleIndices[1]]
+                primary.angles[unknownAngleIndex] = PI - primary.angles[knownAngleIndices[0]] - primary.angles[knownAngleIndices[1]]
                 reSolve() //Will solve the triangle as if it were ASA
             }
             ASS -> {
@@ -82,6 +82,17 @@ class Triangle{
             }
         }
         return solved
+    }
+
+    /**
+     * Gets the area of the triangle using Heron's method
+     * Only works if this is a solved triangle
+     * Doesn't return the area of this triangle's solved triangle because there is the possibility (from ASS triangles) that 2 areas might be returned
+     */
+    fun area(): Double{
+        if(!this.isSolved) return 0.0
+        val s = this.sides.sum() / 2
+        return sqrt(s * (s - this.sides[0]) * (s - this.sides[1]) * (s - this.sides[2]))
     }
 
     /**

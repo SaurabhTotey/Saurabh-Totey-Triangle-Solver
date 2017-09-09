@@ -10,4 +10,5 @@ class TriangleDrawer : JPanel(){
         if(triangleToRepresent == null) return
         //TODO handle drawing triangles with triangle information displayed
     }
+
 }
