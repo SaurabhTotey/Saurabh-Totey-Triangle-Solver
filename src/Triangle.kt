@@ -54,7 +54,7 @@ class Triangle{
             SSS -> {
                 primary.angles[0] = acos((pow(primary.sides[1], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[0], 2.0)) / (2 * primary.sides[1] * primary.sides[2])) //Using the law of cosines
                 primary.angles[1] = acos((pow(primary.sides[0], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[1], 2.0)) / (2 * primary.sides[0] * primary.sides[2])) //Using the law of cosines
-                primary.angles[2] = PI - primary.angles[0] - primary.angles[1]  //Because all angles must add up to π
+                primary.angles[2] = PI - primary.angles[0] - primary.angles[1] //Because all angles must add up to π
             }
             SAS -> {
                 val unknownSideIndex = getIndicesSuchThat{a -> !hasBeenInitialized(primary.sides[a])}[0]
@@ -68,16 +68,23 @@ class Triangle{
                 reSolve() //Will solve the triangle as if it were ASA
             }
             ASA -> {
-                //TODO solve this without calling reSolve(); either 1 or 2 sides already exist, and 2 or 3 angles already exist
+                val knownAngleIndices = getIndicesSuchThat{a -> hasBeenInitialized(primary.angles[a])}
+                val knownSideIndices = getIndicesSuchThat{a -> hasBeenInitialized(primary.sides[a])}
+                if(knownAngleIndices.size == 2){ //Will solve the remaining angle if it is yet unsolved
+                    primary.angles[getIndicesSuchThat{a -> a !in knownAngleIndices}[0]] = PI - primary.angles[knownAngleIndices[0]] - primary.angles[knownAngleIndices[1]] //Because all angles must add up to π
+                }
+                for(unknownIndex in getIndicesSuchThat{a -> a !in knownSideIndices}){ //Will solve for any unsolved sides now that all angles are solved
+                    primary.sides[unknownIndex] = sin(primary.angles[unknownIndex]) * primary.sides[knownSideIndices[0]] / sin(primary.angles[knownSideIndices[0]]) //Using the law of sines
+                }
             }
             AAS -> {
                 val unknownAngleIndex = getIndicesSuchThat{a -> !hasBeenInitialized(primary.angles[a])}[0]
                 val knownAngleIndices = getIndicesSuchThat{a -> a != unknownAngleIndex}
-                primary.angles[unknownAngleIndex] = PI - primary.angles[knownAngleIndices[0]] - primary.angles[knownAngleIndices[1]]
+                primary.angles[unknownAngleIndex] = PI - primary.angles[knownAngleIndices[0]] - primary.angles[knownAngleIndices[1]] //Because all angles must add up to π
                 reSolve() //Will solve the triangle as if it were ASA
             }
             ASS -> {
-                solved = arrayOf(this.copy(), this.copy())
+                solved = arrayOf(this.copy(), this.copy()) //Because a triangle given by ASS doesn't define a unique triangle, there might be two possible solutions
                 //TODO solve this and give both possible solutions
             }
         }
@@ -113,7 +120,7 @@ val SAS = TriangleType("SAS")
 val AAA = TriangleType("AAA") //Does not define a unique triangle
 val ASA = TriangleType("ASA")
 val AAS = TriangleType("AAS")
-val ASS = TriangleType("ASS") //Does not define a unique triangle
+val ASS = TriangleType("ASS") //Does not necessarily define a unique triangle
 
 /**
  * A class that defines the type of a triangle
