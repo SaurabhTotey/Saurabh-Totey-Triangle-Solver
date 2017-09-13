@@ -14,18 +14,10 @@ fun getIndicesSuchThat(predicate: (Int) -> Boolean) : List<Int>{
  * This is where all the math of the triangle is handled
  * This logic class uses radians as do all people of logic
  */
-class Triangle{
+class Triangle(var sides: Array<Double>, var angles: Array<Double>){
 
-    /**
-     * An array of all the sides
-     * Each side in this array corresponds to an opposite angle in the angles array
-     */
-    var sides = Array(3, {_ -> -1.0})
-    /**
-     * An array of all the angles
-     * Each angle in this array corresponds to an opposite side in the sides array
-     */
-    var angles = Array(3, {_ -> -1.0})
+    constructor() : this(Array(3, {_ -> -1.0}), Array(3, {_ -> -1.0}))
+
     /**
      * The type of the triangle
      * Is dynamically calculated
@@ -153,18 +145,18 @@ class TriangleType{
             3 -> arrayOf(Part.SIDE, Part.SIDE, Part.SIDE)
             1 -> //1 is checked before 2 because 2 has the possibility of making an ASS triangle when a AAS triangle is possible, and ASS is the least desirable triangle
                 //If there are 3 angles and 1 side or if the side opposite the uninitialized angle is initialized, the triangle is ASA, otherwise it is AAS
-                if(initializedAngles.size == 3 || hasBeenInitialized(sides[getIndicesSuchThat{a -> a !in initializedAngles}[0]])){
+                if(initializedAngles.size == 3 || hasBeenInitialized(sides[getIndicesSuchThat{a -> a !in initializedAngles}[0]]))
                     arrayOf(Part.ANGLE, Part.SIDE, Part.ANGLE)
-                }else{
+                else
                     arrayOf(Part.ANGLE, Part.ANGLE, Part.SIDE)
-                }
+
             2 ->
                 //If the angle opposite the uninitialized side is initialized, the triangle is SAS, otherwise, it is ASS
-                if(hasBeenInitialized(angles[getIndicesSuchThat{a -> a !in initializedSides}[0]])){
+                if(hasBeenInitialized(angles[getIndicesSuchThat{a -> a !in initializedSides}[0]]))
                     arrayOf(Part.SIDE, Part.ANGLE, Part.SIDE)
-                }else{
+                else
                     arrayOf(Part.ANGLE, Part.SIDE, Part.SIDE)
-                }
+
             0 -> arrayOf(Part.ANGLE, Part.ANGLE, Part.ANGLE)
             else -> this.type
         }
@@ -203,6 +195,21 @@ class TriangleType{
      */
     override fun equals(other: Any?): Boolean {
         return other is TriangleType && (Arrays.equals(other.type, this.type) || Arrays.equals(other.type, this.type.reversedArray()))
+    }
+
+    /**
+     * Defines hashCode so that this object may behave consistently
+     * Also so that IntelliJ doesn't complain
+     * TODO This current implementation does not work as it does not account for palindromes
+     */
+    override fun hashCode(): Int{
+        return this.type.map{a ->
+            when(a){
+                Part.SIDE -> "1"
+                Part.ANGLE -> "0"
+                Part.UNKNOWN -> "9"
+            }
+        }.toString().toInt()
     }
 
 }
