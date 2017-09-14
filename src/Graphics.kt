@@ -2,6 +2,7 @@ import com.fathzer.soft.javaluator.DoubleEvaluator  //http://javaluator.sourcefo
 import net.miginfocom.swing.MigLayout               //http://www.miglayout.com                   is used: https://opensource.org/licenses/lgpl-3.0.html
 import java.awt.Font
 import java.awt.GraphicsEnvironment
+import java.awt.Image
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.io.File
@@ -44,7 +45,7 @@ class MainWindow{
              */
             frame = JFrame("Saurabh Totey Triangle Solver")
             frame.iconImage = ImageIO.read(File("res/Icon.png"))
-            frame.layout = MigLayout("")
+            frame.layout = MigLayout()
             frame.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
             //Makes the frame bounds such that the frame is exactly in the middle of the screen filling half of its width/height
             val allDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().screenDevices
@@ -61,13 +62,14 @@ class MainWindow{
              * ANGLE PANE
              * Makes the angles pane which handles angle mode and conversions of angles
              */
-            var anglesPane = JPanel(MigLayout(""))
+            var anglesPane = JPanel(MigLayout())
             //Below makes the mode which selects whether the triangle inputs should be inputted/outputted as radians or degrees
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
             var modeDropDownMenu = JComboBox(angleOptions)
             modeDropDownMenu.font = defaultFont
             modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]}
-            anglesPane.add(modeDropDownMenu)
+            anglesPane.add(JLabel(), "push") //Just to put extra space
+            anglesPane.add(modeDropDownMenu, "push")
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
             val boxLength = 8
             var degreesConversionBox = JTextField(boxLength)
@@ -102,13 +104,23 @@ class MainWindow{
             degreesLabel.font = defaultFont
             radiansLabel.font = defaultFont
             equalsLabel.font = defaultFont
-            anglesPane.add(JLabel("    "), "")
             anglesPane.add(degreesConversionBox, "")
             anglesPane.add(degreesLabel, "")
             anglesPane.add(equalsLabel, "")
             anglesPane.add(radiansConversionBox, "")
-            anglesPane.add(radiansLabel, "")
-            frame.add(anglesPane, "dock south")
+            anglesPane.add(radiansLabel, "push")
+            var helpButton = JButton()
+            helpButton.icon = ImageIcon(ImageIO.read(File("res/HelpButton.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH)) //TODO find a better way to have image be reasonable size rather than hardcoding 25px
+            helpButton.isBorderPainted = false
+            anglesPane.add(helpButton)
+            frame.add(anglesPane, "dock south, height 10%!, width 100%!")
+
+            /*
+             * IO PANE
+             * Where the user can input their triangle information and where a little bit of triangle information is displayed
+             */
+            var ioPane = JPanel(MigLayout())
+            frame.add(ioPane, "dock east, height 90%!, width 25%!")
 
             frame.isVisible = true
         }
