@@ -1,5 +1,6 @@
 import com.fathzer.soft.javaluator.DoubleEvaluator  //http://javaluator.sourceforge.net/en/home/ is used: https://opensource.org/licenses/lgpl-3.0.html
 import net.miginfocom.swing.MigLayout               //http://www.miglayout.com                   is used: https://opensource.org/licenses/lgpl-3.0.html
+import java.awt.Color
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 import java.awt.Image
@@ -63,12 +64,13 @@ class MainWindow{
              * Makes the angles pane which handles angle mode and conversions of angles
              */
             var anglesPane = JPanel(MigLayout())
+            anglesPane.background = Color.GRAY
+            anglesPane.border = BorderFactory.createEtchedBorder()
             //Below makes the mode which selects whether the triangle inputs should be inputted/outputted as radians or degrees
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
             var modeDropDownMenu = JComboBox(angleOptions)
             modeDropDownMenu.font = defaultFont
             modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]}
-            anglesPane.add(JLabel(), "push") //Just to put extra space
             anglesPane.add(modeDropDownMenu, "push")
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
             val boxLength = 8
