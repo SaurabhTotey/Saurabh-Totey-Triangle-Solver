@@ -56,7 +56,7 @@ class MainWindow{
             val screenY = allDevices[0].defaultConfiguration.bounds.height
             frame.setBounds(screenX / 4 + topLeftX, screenY / 4 + topLeftY, screenX / 2, screenY / 2)
             //Makes the font based off of screen size
-            titleFont = Font(Font.SERIF, Font.ROMAN_BASELINE, screenX / 70)
+            titleFont = Font(Font.SERIF, Font.ROMAN_BASELINE, screenX / 90)
             defaultFont = Font(Font.MONOSPACED, Font.PLAIN, screenX / 130)
 
             /*
@@ -82,7 +82,7 @@ class MainWindow{
                     radiansConversionBox.text = try{
                         (mathEngine.evaluate(degreesConversionBox.text) * Math.PI / 180).toString()
                     }catch(e: Exception){
-                        "???"
+                        ""
                     }
                     radiansConversionBox.caretPosition = 0
                 }
@@ -93,7 +93,7 @@ class MainWindow{
                     degreesConversionBox.text = try{
                         (mathEngine.evaluate(radiansConversionBox.text) * 180 / Math.PI).toString()
                     }catch(e: Exception){
-                        "???"
+                        ""
                     }
                     degreesConversionBox.caretPosition = 0
                 }
@@ -121,8 +121,16 @@ class MainWindow{
              * IO PANE
              * Where the user can input their triangle information and where a little bit of triangle information is displayed
              */
-            var ioPane = JPanel(MigLayout())
+            var ioPane = JPanel(MigLayout("fill"))
+            ioPane.background = Color.LIGHT_GRAY
+            ioPane.border = BorderFactory.createEtchedBorder()
             frame.add(ioPane, "dock east, height 90%!, width 25%!")
+            var paneLabel = JLabel("Triangle Information", JLabel.CENTER)
+            paneLabel.font = titleFont
+            ioPane.add(paneLabel, "dock north, span, grow, wrap")
+            var typeLabel = JLabel("Triangle Type", JLabel.CENTER)
+            typeLabel.font = defaultFont
+            ioPane.add(typeLabel, "span, grow, wrap")
 
             frame.isVisible = true
         }
