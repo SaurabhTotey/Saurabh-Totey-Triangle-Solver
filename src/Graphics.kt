@@ -69,27 +69,27 @@ class MainWindow{
             modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]}
             anglesPane.add(modeDropDownMenu)
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
-            val boxLength = 4
+            val boxLength = 8
             var degreesConversionBox = JTextField(boxLength)
             var radiansConversionBox = JTextField(boxLength)
             degreesConversionBox.addKeyListener(object : KeyListener{
-                override fun keyTyped(p0: KeyEvent?) {} override fun keyReleased(p0: KeyEvent?) {}
-                override fun keyPressed(p0: KeyEvent?) {
+                override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
+                override fun keyReleased(p0: KeyEvent?) {
                     radiansConversionBox.text = try{
                         (mathEngine.evaluate(degreesConversionBox.text) * Math.PI / 180).toString()
                     }catch(e: Exception){
-                        ""
+                        "???"
                     }
                     radiansConversionBox.caretPosition = 0
                 }
             })
             radiansConversionBox.addKeyListener(object : KeyListener{
-                override fun keyTyped(p0: KeyEvent?) {} override fun keyReleased(p0: KeyEvent?) {}
-                override fun keyPressed(p0: KeyEvent?) {
+                override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
+                override fun keyReleased(p0: KeyEvent?) {
                     degreesConversionBox.text = try{
                         (mathEngine.evaluate(radiansConversionBox.text) * 180 / Math.PI).toString()
                     }catch(e: Exception){
-                        ""
+                        "???"
                     }
                     degreesConversionBox.caretPosition = 0
                 }
