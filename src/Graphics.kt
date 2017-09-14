@@ -76,7 +76,7 @@ class MainWindow{
             val boxLength = 8
             var degreesConversionBox = JTextField(boxLength)
             var radiansConversionBox = JTextField(boxLength)
-            degreesConversionBox.addKeyListener(object : KeyListener{
+            degreesConversionBox.addKeyListener(object: KeyListener{
                 override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
                     radiansConversionBox.text = try{
@@ -87,7 +87,7 @@ class MainWindow{
                     radiansConversionBox.caretPosition = 0
                 }
             })
-            radiansConversionBox.addKeyListener(object : KeyListener{
+            radiansConversionBox.addKeyListener(object: KeyListener{
                 override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
                     degreesConversionBox.text = try{

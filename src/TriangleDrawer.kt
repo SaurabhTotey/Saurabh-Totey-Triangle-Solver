@@ -1,7 +1,7 @@
 import java.awt.Graphics
 import javax.swing.JPanel
 
-class TriangleDrawer : JPanel(){
+class TriangleDrawer: JPanel(){
 
     var triangleToRepresent: Triangle? = null
 

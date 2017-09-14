@@ -5,7 +5,7 @@ val hasBeenInitialized = {a: Double -> a > 0} //A function that will return whet
 /**
  * A function that will return indices given a certain predicate
  */
-fun getIndicesSuchThat(predicate: (Int) -> Boolean) : List<Int>{
+fun getIndicesSuchThat(predicate: (Int) -> Boolean): List<Int>{
     return arrayOf(0, 1, 2).filter{a -> predicate(a)}
 }
 
@@ -16,7 +16,7 @@ fun getIndicesSuchThat(predicate: (Int) -> Boolean) : List<Int>{
  */
 class Triangle(var sides: Array<Double>, var angles: Array<Double>){
 
-    constructor() : this(Array(3, {_ -> -1.0}), Array(3, {_ -> -1.0}))
+    constructor(): this(Array(3, {_ -> -1.0}), Array(3, {_ -> -1.0}))
 
     /**
      * The type of the triangle
