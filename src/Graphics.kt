@@ -113,7 +113,6 @@ class MainWindow{
             anglesPane.add(radiansLabel, "push")
             var helpButton = JButton()
             helpButton.icon = ImageIcon(ImageIO.read(File("res/HelpButton.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH)) //TODO find a better way to have image be reasonable size rather than hardcoding 25px
-            helpButton.isBorderPainted = false
             anglesPane.add(helpButton)
             frame.add(anglesPane, "dock south, height 10%!, width 100%!")
 
@@ -121,16 +120,29 @@ class MainWindow{
              * IO PANE
              * Where the user can input their triangle information and where a little bit of triangle information is displayed
              */
-            var ioPane = JPanel(MigLayout("fill"))
+            var ioPane = JPanel(MigLayout("fillx"))
             ioPane.background = Color.LIGHT_GRAY
             ioPane.border = BorderFactory.createEtchedBorder()
-            frame.add(ioPane, "dock east, height 90%!, width 25%!")
-            var paneLabel = JLabel("Triangle Information", JLabel.CENTER)
+            var paneLabel = JLabel("Triangle Information")
             paneLabel.font = titleFont
-            ioPane.add(paneLabel, "dock north, span, grow, wrap")
-            var typeLabel = JLabel("Triangle Type", JLabel.CENTER)
+            ioPane.add(paneLabel, "span, align center, wrap")
+            ioPane.add(JLabel(" "), "span, wrap") //Just for space
+            var typeLabel = JLabel("Triangle Type")
             typeLabel.font = defaultFont
-            ioPane.add(typeLabel, "span, grow, wrap")
+            ioPane.add(typeLabel, "span, align center, wrap")
+            var typeIO = JTextField(13)
+            typeIO.horizontalAlignment = JTextField.CENTER
+            typeIO.font = defaultFont
+            typeIO.addKeyListener(object: KeyListener{
+                override fun keyTyped(e: KeyEvent?){} override fun keyPressed(e: KeyEvent?){}
+                override fun keyReleased(e: KeyEvent?) {
+                    if(typeIO.text.length == 3){
+                        //TODO
+                    }
+                }
+            })
+            ioPane.add(typeIO, "span, align center, wrap")
+            frame.add(ioPane, "dock east, height 90%!, width 25%!")
 
             frame.isVisible = true
         }
