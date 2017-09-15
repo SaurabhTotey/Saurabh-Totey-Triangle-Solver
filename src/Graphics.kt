@@ -1,4 +1,3 @@
-import com.fathzer.soft.javaluator.DoubleEvaluator  //http://javaluator.sourceforge.net/en/home/ is used: https://opensource.org/licenses/lgpl-3.0.html
 import net.miginfocom.swing.MigLayout               //http://www.miglayout.com                   is used: https://opensource.org/licenses/lgpl-3.0.html
 import java.awt.Color
 import java.awt.Font
@@ -29,7 +28,7 @@ class MainWindow{
     private lateinit var frame: JFrame
     private lateinit var defaultFont: Font
     private lateinit var titleFont: Font
-    private val mathEngine = DoubleEvaluator()
+    private val mathEngine = MathEvaluator()
     private val triangleDrawings: Array<TriangleDrawer> = arrayOf(TriangleDrawer(), TriangleDrawer())
     private var isInRads = true
 
@@ -67,6 +66,9 @@ class MainWindow{
             anglesPane.background = Color.GRAY
             anglesPane.border = BorderFactory.createEtchedBorder()
             //Below makes the mode which selects whether the triangle inputs should be inputted/outputted as radians or degrees
+            var angleModeLabel = JLabel("Angle Input Mode:")
+            angleModeLabel.font = defaultFont
+            anglesPane.add(angleModeLabel)
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
             var modeDropDownMenu = JComboBox(angleOptions)
             modeDropDownMenu.font = defaultFont
