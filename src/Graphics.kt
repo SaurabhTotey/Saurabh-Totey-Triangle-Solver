@@ -144,6 +144,17 @@ class MainWindow{
                 }
             })
             ioPane.add(typeIO, "span, align center, wrap")
+            //Below is where the user enters their data
+            ioPane.add(JLabel(" "), "height 20%!, wrap")
+            val boxWidth = 8
+            var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{a -> a.font = defaultFont; a.horizontalAlignment = JTextField.CENTER; a}
+            var typeBoxes = Array(3, {_ -> JComboBox(arrayOf("a", "b", "c", "A", "B", "C"))}).map{a -> a.font = defaultFont; a}
+            for(i in 0..2){
+                ioPane.add(JLabel(), "pushx, growx") //Added before and after information so that it is spaced in center
+                ioPane.add(inputBoxes[i], "growx")
+                ioPane.add(typeBoxes[i], "growx")
+                ioPane.add(JLabel(), "pushx, growx, wrap") //Added before and after information so that it is spaced in center
+            }
             frame.add(ioPane, "dock east, height 90%!, width 25%!")
 
             frame.isVisible = true
