@@ -136,10 +136,23 @@ class MainWindow{
             typeIO.horizontalAlignment = JTextField.CENTER
             typeIO.font = defaultFont
             typeIO.addKeyListener(object: KeyListener{
-                override fun keyTyped(e: KeyEvent?){} override fun keyPressed(e: KeyEvent?){}
+                override fun keyPressed(e: KeyEvent?){}
+                /**
+                 * Formats key inputs such that they are only A or S
+                 */
+                override fun keyTyped(e: KeyEvent?){
+                    try{
+                        if("as".contains(e?.keyChar!!.toLowerCase()) && typeIO.text.length < 3){
+                            e.keyChar = e.keyChar.toUpperCase()
+                        }else e.consume()
+                    }catch(er: Exception){}
+                }
+                /**
+                 * Adjusts input triangle part boxes such that they match the given triangle type
+                 */
                 override fun keyReleased(e: KeyEvent?) {
                     if(typeIO.text.length == 3){
-                        //TODO
+                        //TODO update triangle part boxes such that they match the triangle type in this box
                     }
                 }
             })
@@ -148,7 +161,13 @@ class MainWindow{
             ioPane.add(JLabel(" "), "height 20%!, wrap")
             val boxWidth = 8
             var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{a -> a.font = defaultFont; a.horizontalAlignment = JTextField.CENTER; a}
-            var typeBoxes = Array(3, {_ -> JComboBox(arrayOf("a", "b", "c", "A", "B", "C"))}).map{a -> a.font = defaultFont; a}
+            val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
+            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{a -> a.font = defaultFont; a.addActionListener{
+                //TODO update typeIO textfield such that triangle type matches input boxes and make sure that user can't select same triangle part twice
+            }; a}
+            for(i in 0..2){
+                typeBoxes[i].selectedIndex = i
+            }
             for(i in 0..2){
                 ioPane.add(JLabel(), "pushx, growx") //Added before and after information so that it is spaced in center
                 ioPane.add(inputBoxes[i], "growx")
