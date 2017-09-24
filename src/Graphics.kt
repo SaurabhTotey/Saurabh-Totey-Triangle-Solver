@@ -142,7 +142,7 @@ class MainWindow{
                  */
                 override fun keyTyped(e: KeyEvent?){
                     try{
-                        if("as".contains(e?.keyChar!!.toLowerCase()) && typeIO.text.length < 3){
+                        if("as".contains(e?.keyChar!!.toLowerCase())){
                             e.keyChar = e.keyChar.toUpperCase()
                         }else e.consume()
                     }catch(er: Exception){}
@@ -151,6 +151,9 @@ class MainWindow{
                  * Adjusts input triangle part boxes such that they match the given triangle type
                  */
                 override fun keyReleased(e: KeyEvent?) {
+                    if(typeIO.text.length > 3){
+                        typeIO.text = typeIO.text.substring(0..2)
+                    }
                     if(typeIO.text.length == 3){
                         //TODO update triangle part boxes such that they match the triangle type in this box
                     }
@@ -160,11 +163,11 @@ class MainWindow{
             //Below is where the user enters their data
             ioPane.add(JLabel(" "), "height 20%!, wrap")
             val boxWidth = 8
-            var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{a -> a.font = defaultFont; a.horizontalAlignment = JTextField.CENTER; a}
+            var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it}
             val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
-            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{a -> a.font = defaultFont; a.addActionListener{
+            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it.addActionListener{
                 //TODO update typeIO textfield such that triangle type matches input boxes and make sure that user can't select same triangle part twice
-            }; a}
+            }; it}
             for(i in 0..2){
                 typeBoxes[i].selectedIndex = i
             }
