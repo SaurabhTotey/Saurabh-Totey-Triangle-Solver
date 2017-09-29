@@ -138,7 +138,7 @@ class TriangleType{
     constructor(sides: Array<Double>, angles: Array<Double>){
         val initializedSides = getIndicesSuchThat{hasBeenInitialized(sides[it])}
         val initializedAngles = getIndicesSuchThat{hasBeenInitialized(angles[it])}
-        assert(initializedSides.size + initializedAngles.size >= 3)
+        if(initializedSides.size + initializedAngles.size < 3) return
         //Sets the type to the first applicable found triangle type; order is checked in terms of desirability (eg. least desirable types checked last)
         //That way if a triangle fulfills the condition of a desirable type and an undesirable type, it will get checked against the desirable type first and thus become it
         this.type = when(initializedSides.size){
@@ -180,7 +180,7 @@ class TriangleType{
      * A string representation of this triangle type
      */
     override fun toString(): String {
-        return type.joinToString{
+        return type.joinToString(""){
             when(it){
                 Part.SIDE -> "S"
                 Part.ANGLE -> "A"

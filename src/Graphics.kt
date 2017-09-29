@@ -21,7 +21,8 @@ fun main(args: Array<String>) {
 /**
  * A class for the window that displays all of the information
  * Is how the user interfaces with the program (duh)
- * Most of the graphics logic is defined here, but triangle drawing is handled in TriangleDrawer.kt
+ * Most of the graphics logic is defined in this class's refresh method, but triangle drawing is handled in TriangleDrawer.kt
+ * The constructor of this object only contains the GUI layout, which, due to the way Java Swing works, is basically unreadable
  */
 class MainWindow{
 
@@ -35,7 +36,7 @@ class MainWindow{
     /**
      * What the main window should do once created
      * Makes and displays the window on the Swing thread
-     * Defines graphics logic except for drawing triangles
+     * Defines graphics layout
      */
     init{
         SwingUtilities.invokeAndWait{
@@ -141,9 +142,19 @@ class MainWindow{
             val boxWidth = 8
             var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it}
             val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
-            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it.addActionListener{
-                //TODO update typeIO textfield such that triangle type matches input boxes and make sure that user can't select same triangle part twice
-            }; it}
+            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it}
+            var willChangeTypeIO = true //A lock that makes sure that if the typeIO box tries to change the typeboxes, the typeboxes won't change the typeIO box back
+            typeBoxes.map{ //Mapped separately because it references type boxes, and if it was mapped in the above line, typeboxes doesn't exist yet as it is being constructed
+                it.addActionListener{
+                    if(willChangeTypeIO){ //Checks that the typebox is allowed to modify the typeIO box
+                        var partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
+                        for(i in 0..2){
+                            partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = 1.0
+                        }
+                        typeIO.text = TriangleType(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5)).toString()
+                    }
+                }; it
+            }
             typeIO.addKeyListener(object: KeyListener{
                 override fun keyPressed(e: KeyEvent?){}
                 /**
@@ -164,9 +175,11 @@ class MainWindow{
                         typeIO.text = typeIO.text.substring(0..2)
                     }
                     if(typeIO.text.length == 3){
+                        willChangeTypeIO = false
                         for(i in 0..2){
                             typeBoxes[i].selectedIndex = i + if(typeIO.text[i] == 'S') 0 else 3 //TODO improve readability and extensibility; this is UGLY
                         }
+                        willChangeTypeIO = true
                     }
                 }
             })
