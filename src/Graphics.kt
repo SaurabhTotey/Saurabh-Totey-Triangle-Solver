@@ -114,7 +114,7 @@ class MainWindow{
             anglesPane.add(radiansConversionBox, "")
             anglesPane.add(radiansLabel, "push")
             var helpButton = JButton()
-            helpButton.icon = ImageIcon(ImageIO.read(File("res/HelpButton.png")).getScaledInstance(25, 25, Image.SCALE_SMOOTH)) //TODO find a better way to have image be reasonable size rather than hardcoding 25px
+            helpButton.icon = ImageIcon(ImageIO.read(File("res/HelpButton.png")).getScaledInstance(screenX / 90, screenX / 90, Image.SCALE_SMOOTH))
             anglesPane.add(helpButton)
             frame.add(anglesPane, "dock south, height 10%!, width 100%!")
 
@@ -135,6 +135,15 @@ class MainWindow{
             var typeIO = JTextField(13)
             typeIO.horizontalAlignment = JTextField.CENTER
             typeIO.font = defaultFont
+            ioPane.add(typeIO, "span, align center, wrap")
+            //Below is where the user enters their data
+            ioPane.add(JLabel(" "), "height 20%!, wrap")
+            val boxWidth = 8
+            var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it}
+            val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
+            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it.addActionListener{
+                //TODO update typeIO textfield such that triangle type matches input boxes and make sure that user can't select same triangle part twice
+            }; it}
             typeIO.addKeyListener(object: KeyListener{
                 override fun keyPressed(e: KeyEvent?){}
                 /**
@@ -155,19 +164,12 @@ class MainWindow{
                         typeIO.text = typeIO.text.substring(0..2)
                     }
                     if(typeIO.text.length == 3){
-                        //TODO update triangle part boxes such that they match the triangle type in this box
+                        for(i in 0..2){
+                            typeBoxes[i].selectedIndex = i + if(typeIO.text[i] == 'S') 0 else 3 //TODO improve readability and extensibility; this is UGLY
+                        }
                     }
                 }
             })
-            ioPane.add(typeIO, "span, align center, wrap")
-            //Below is where the user enters their data
-            ioPane.add(JLabel(" "), "height 20%!, wrap")
-            val boxWidth = 8
-            var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it}
-            val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
-            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it.addActionListener{
-                //TODO update typeIO textfield such that triangle type matches input boxes and make sure that user can't select same triangle part twice
-            }; it}
             for(i in 0..2){
                 typeBoxes[i].selectedIndex = i
             }
