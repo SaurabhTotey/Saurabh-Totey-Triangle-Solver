@@ -176,8 +176,16 @@ class MainWindow{
                     }
                     if(typeIO.text.length == 3){
                         willChangeTypeIO = false
-                        for(i in 0..2){
-                            typeBoxes[i].selectedIndex = i + if(typeIO.text[i] == 'S') 0 else 3 //TODO improve readability and extensibility; this is UGLY
+                        if(typeIO.text[1] != typeIO.text[0] && typeIO.text[0] == typeIO.text[2]){   //If the middle char is unique
+                            for(i in 0..2){
+                                typeBoxes[i].selectedIndex = i + if(typeIO.text[i] == 'A') 3 else 0
+                            }
+                        }else{
+                            var sideIndex = 0
+                            var angleIndex = 3
+                            for(i in 0..2){
+                                typeBoxes[i].selectedIndex = if(typeIO.text[i] == 'S') sideIndex++ else angleIndex++
+                            }
                         }
                         willChangeTypeIO = true
                     }
