@@ -29,6 +29,7 @@ class MainWindow{
     private lateinit var frame: JFrame
     private lateinit var defaultFont: Font
     private lateinit var titleFont: Font
+    private lateinit var inputBoxes: Array<JTextField>
     private val mathEngine = MathEvaluator()
     private val triangleDrawings: Array<TriangleDrawer> = arrayOf(TriangleDrawer(), TriangleDrawer())
     private var isInRads = true
@@ -140,7 +141,12 @@ class MainWindow{
             //Below is where the user enters their data
             ioPane.add(JLabel(" "), "height 20%!, wrap")
             val boxWidth = 8
-            var inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it}
+            inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it.addKeyListener(object: KeyListener{
+                override fun keyPressed(e: KeyEvent?) {}override fun keyTyped(e: KeyEvent?) {}
+                override fun keyReleased(e: KeyEvent?) {
+                    refresh()
+                }
+            }); it}.toTypedArray()
             val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
             var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it}
             var willChangeTypeIO = true //A lock that makes sure that if the typeIO box tries to change the typeboxes, the typeboxes won't change the typeIO box back
@@ -153,6 +159,7 @@ class MainWindow{
                         }
                         typeIO.text = TriangleType(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5)).toString()
                     }
+                    refresh()
                 }; it
             }
             typeIO.addKeyListener(object: KeyListener{
@@ -208,8 +215,15 @@ class MainWindow{
 
     /**
      * What the window should do every time it needs to update or refresh itself
+     * Updates the drawings
      */
     fun refresh(){
+        val inputted = Triangle() //TODO take numbers from inputBoxes and correctly place them in the triangle constructor
+        val solutions = inputted.solutions()
+        triangleDrawings[0].triangleToRepresent = solutions[0]
+        if(solutions.size == 2){
+            triangleDrawings[1].triangleToRepresent = solutions[1]
+        }
         frame.repaint()
         frame.revalidate()
     }

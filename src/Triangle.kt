@@ -36,11 +36,11 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>){
      * Doesn't actually modify base triangle
      * Returns an array because solving for an ASS triangle with the law of sines may return two triangles
      */
-    fun solution(): Array<Triangle>{
+    fun solutions(): Array<Triangle>{
         var solved = arrayOf(this.copy())
         var primary = solved[0]
         fun reSolve(){
-            solved = primary.solution()
+            solved = primary.solutions()
         }
         when(this.type){
             SSS -> {
