@@ -12,7 +12,7 @@ class TriangleDrawer: JPanel(){
      * The color pallete of the colors to be used for drawing the triangle
      */
     val aColor = Color.BLUE
-    val bColor = Color.GREEN
+    val bColor = Color.PINK
     val cColor = Color.ORANGE
     //Sets each index to a color
     val colorMap = hashMapOf(0 to aColor, 1 to bColor, 2 to cColor)

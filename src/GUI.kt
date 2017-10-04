@@ -21,6 +21,12 @@ fun main(args: Array<String>) {
 }
 
 /**
+ * A globally accessible array of string formats of triangle parts
+ * Is so a uniform and standard array and ordering may be used everywhere else
+ */
+val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
+
+/**
  * A class for the window that displays all of the information
  * Is how the user interfaces with the program (duh)
  * Triangle drawing is handled in TriangleDrawer.kt
@@ -32,6 +38,7 @@ class MainWindow{
     private lateinit var defaultFont: Font
     private lateinit var titleFont: Font
     private lateinit var inputBoxes: Array<JTextField>
+    private lateinit var typeBoxes: Array<JComboBox<String>>
     private val mathEngine = MathEvaluator()
     private val triangleDrawings: Array<TriangleDrawer> = arrayOf(TriangleDrawer(), TriangleDrawer())
     private var isInRads = true
@@ -154,8 +161,7 @@ class MainWindow{
                     refresh()
                 }
             }); it}.toTypedArray()
-            val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
-            var typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it}
+            typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it}.toTypedArray()
             var willChangeTypeIO = true //A lock that makes sure that if the typeIO box tries to change the typeboxes, the typeboxes won't change the typeIO box back
             typeBoxes.map{ //Mapped separately because it references type boxes, and if it was mapped in the above line, typeboxes doesn't exist yet as it is being constructed
                 it.addActionListener{
@@ -226,11 +232,21 @@ class MainWindow{
      * Updates the drawings
      */
     fun refresh(){
-        val inputted = Triangle(arrayOf(1.0, 1.0, 1.0), arrayOf(-1.0, -1.0, -1.0)) //TODO take numbers from inputBoxes and correctly place them in the triangle constructor
-        val solutions = inputted.solutions()
-        triangleDrawings[0].triangleToRepresent = solutions[0]
-        if(solutions.size == 2){
-            triangleDrawings[1].triangleToRepresent = solutions[1]
+        var inputted: Triangle = try{
+            var partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
+            for(i in 0..2){
+                partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = mathEngine.evaluate(inputBoxes[i].text)
+            }
+            Triangle(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5))
+        }catch(e: Exception){
+            Triangle()
+        }
+        if(inputted.isValid()){
+            val solutions = inputted.solutions()
+            triangleDrawings[0].triangleToRepresent = solutions[0]
+            if(solutions.size == 2){
+                triangleDrawings[1].triangleToRepresent = solutions[1]
+            }
         }
         for(drawing in triangleDrawings){
             frame.remove(drawing)

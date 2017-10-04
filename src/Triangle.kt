@@ -19,6 +19,13 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>){
     constructor(): this(Array(3, {_ -> -1.0}), Array(3, {_ -> -1.0}))
 
     /**
+     * This just figures out if the triangle is valid or not with the given inputs
+     */
+    fun isValid(): Boolean{
+        return true //TODO make this
+    }
+
+    /**
      * The type of the triangle
      * Is dynamically calculated
      */
