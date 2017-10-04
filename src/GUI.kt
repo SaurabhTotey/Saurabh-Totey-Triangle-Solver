@@ -3,6 +3,8 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 import java.awt.Image
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.io.File
@@ -21,8 +23,8 @@ fun main(args: Array<String>) {
 /**
  * A class for the window that displays all of the information
  * Is how the user interfaces with the program (duh)
- * Most of the graphics logic is defined in this class's refresh method, but triangle drawing is handled in TriangleDrawer.kt
- * The constructor of this object only contains the GUI layout, which, due to the way Java Swing works, is basically unreadable
+ * Triangle drawing is handled in TriangleDrawer.kt
+ * The constructor of this object only contains the GUI layout and behaviour, which, due to the way Java Swing works, is basically unreadable
  */
 class MainWindow{
 
@@ -37,7 +39,7 @@ class MainWindow{
     /**
      * What the main window should do once created
      * Makes and displays the window on the Swing thread
-     * Defines graphics layout
+     * Defines graphics layout and behaviour
      */
     init{
         SwingUtilities.invokeAndWait{
@@ -56,6 +58,11 @@ class MainWindow{
             val screenX = allDevices[0].defaultConfiguration.bounds.width
             val screenY = allDevices[0].defaultConfiguration.bounds.height
             frame.setBounds(screenX / 4 + topLeftX, screenY / 4 + topLeftY, screenX / 2, screenY / 2)
+            frame.addComponentListener(object: ComponentAdapter() {
+                override fun componentResized(e: ComponentEvent?) {
+                    refresh()
+                }
+            })
             //Makes the font based off of screen size
             titleFont = Font(Font.SERIF, Font.ROMAN_BASELINE, screenX / 90)
             defaultFont = Font(Font.MONOSPACED, Font.PLAIN, screenX / 130)
@@ -208,6 +215,10 @@ class MainWindow{
                 ioPane.add(JLabel(), "pushx, growx, wrap") //Added before and after information so that it is spaced in center
             }
             frame.add(ioPane, "dock east, height 90%!, width 25%!")
+
+            /*
+             * TODO place triangle drawers in frame and make sure they size correctly depending on whether they have triangles or not
+             */
 
             frame.isVisible = true
         }
