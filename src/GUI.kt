@@ -216,11 +216,8 @@ class MainWindow{
             }
             frame.add(ioPane, "dock east, height 90%!, width 25%!")
 
-            /*
-             * TODO place triangle drawers in frame and make sure they size correctly depending on whether they have triangles or not
-             */
-
             frame.isVisible = true
+            refresh()
         }
     }
 
@@ -229,11 +226,17 @@ class MainWindow{
      * Updates the drawings
      */
     fun refresh(){
-        val inputted = Triangle() //TODO take numbers from inputBoxes and correctly place them in the triangle constructor
+        val inputted = Triangle(arrayOf(1.0, 1.0, 1.0), arrayOf(-1.0, -1.0, -1.0)) //TODO take numbers from inputBoxes and correctly place them in the triangle constructor
         val solutions = inputted.solutions()
         triangleDrawings[0].triangleToRepresent = solutions[0]
         if(solutions.size == 2){
             triangleDrawings[1].triangleToRepresent = solutions[1]
+        }
+        for(drawing in triangleDrawings){
+            frame.remove(drawing)
+            if(drawing.triangleToRepresent != null){
+                frame.add(drawing, "grow, push, wrap")
+            }
         }
         frame.repaint()
         frame.revalidate()

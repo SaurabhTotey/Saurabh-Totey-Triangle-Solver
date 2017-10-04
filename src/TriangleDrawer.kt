@@ -73,10 +73,10 @@ class TriangleDrawer: JPanel(){
         drawLine(smallestCornerVal, largestCornerVal, largestCornerVal, largestCornerVal, colorMap[indices[2]]!!)
         //Draws the smallest leg of the triangle as the leg to the left of the bottom leg and scales it appropriately
         val scaledSmallestSideLength = (largestCornerVal - smallestCornerVal) * sides[indices[0]] / sides[indices[2]]
-        drawLine(smallestCornerVal, smallestCornerVal, smallestCornerVal + scaledSmallestSideLength * Math.cos(triangleToRepresent!!.angles[indices[1]]), smallestCornerVal + scaledSmallestSideLength * Math.sin(triangleToRepresent!!.angles[indices[1]]), colorMap[indices[0]]!!)
+        drawLine(smallestCornerVal, largestCornerVal, smallestCornerVal + scaledSmallestSideLength * Math.cos(triangleToRepresent!!.angles[indices[1]]), largestCornerVal - scaledSmallestSideLength * Math.sin(triangleToRepresent!!.angles[indices[1]]), colorMap[indices[0]]!!)
         //Draws the medium sized leg of the triangle as the leg to the right of the bottom leg and scales it appropriately
         val scaledMediumSideLength = (largestCornerVal - smallestCornerVal) * sides[indices[1]] / sides[indices[2]]
-        drawLine(largestCornerVal, largestCornerVal, largestCornerVal - scaledMediumSideLength * Math.cos(triangleToRepresent!!.angles[indices[0]]), largestCornerVal + scaledMediumSideLength * Math.sin(triangleToRepresent!!.angles[indices[0]]), colorMap[indices[1]]!!)
+        drawLine(largestCornerVal, largestCornerVal, largestCornerVal - scaledMediumSideLength * Math.cos(triangleToRepresent!!.angles[indices[0]]), largestCornerVal - scaledMediumSideLength * Math.sin(triangleToRepresent!!.angles[indices[0]]), colorMap[indices[1]]!!)
 
         //TODO display actual triangle information and numbers here
 
