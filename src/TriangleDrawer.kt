@@ -50,9 +50,18 @@ class TriangleDrawer: JPanel(){
 
         //A local function that draws a line given normalized coordinates between 0 and 1 and a color
         fun drawLine(x1: Double, y1: Double, x2: Double, y2: Double, color: Color){
+            //Because x and y scale the same, if either the x space or the y space is bigger, the offset will combat that so any drawing is scaled correctly and centered
+            var xOffset = 0
+            var yOffset = 0
+            if(this.height < this.width){
+                xOffset = (this.width - this.height) / 2
+            }else{
+                yOffset = (this.height - this.width) / 2
+            }
+            //Stores the previous color, changes the drawer's color to the desired color, draws the line with the new color, and then restores the old color to the drawer
             val prevColor = graphics!!.color
             graphics.color = color
-            graphics.drawLine((x1 * this.width).toInt(), (y1 * this.height).toInt(), (x2 * this.width).toInt(), (y2 * this.height).toInt())
+            graphics.drawLine(xOffset + (x1 * this.height).toInt(), yOffset + (y1 * this.height).toInt(), xOffset + (x2 * this.height).toInt(), yOffset + (y2 * this.height).toInt())
             graphics.color = prevColor
         }
 
@@ -62,6 +71,15 @@ class TriangleDrawer: JPanel(){
 
         //Draws the longest leg of the triangle as the bottom; the longest leg is at spot 2 and is always scaled to be the largest length
         drawLine(smallestCornerVal, largestCornerVal, largestCornerVal, largestCornerVal, colorMap[indices[2]]!!)
+        //Draws the smallest leg of the triangle as the leg to the left of the bottom leg and scales it appropriately
+        val scaledSmallestSideLength = (largestCornerVal - smallestCornerVal) * sides[indices[0]] / sides[indices[2]]
+        drawLine(smallestCornerVal, smallestCornerVal, smallestCornerVal + scaledSmallestSideLength * Math.cos(triangleToRepresent!!.angles[indices[1]]), smallestCornerVal + scaledSmallestSideLength * Math.sin(triangleToRepresent!!.angles[indices[1]]), colorMap[indices[0]]!!)
+        //Draws the medium sized leg of the triangle as the leg to the right of the bottom leg and scales it appropriately
+        val scaledMediumSideLength = (largestCornerVal - smallestCornerVal) * sides[indices[1]] / sides[indices[2]]
+        drawLine(largestCornerVal, largestCornerVal, largestCornerVal - scaledMediumSideLength * Math.cos(triangleToRepresent!!.angles[indices[0]]), largestCornerVal + scaledMediumSideLength * Math.sin(triangleToRepresent!!.angles[indices[0]]), colorMap[indices[1]]!!)
+
+        //TODO display actual triangle information and numbers here
+
     }
 
 }
