@@ -56,7 +56,7 @@ class TriangleDrawer: JPanel(){
             //Because x and y scale the same, if either the x space or the y space is bigger, the offset will combat that so any drawing is scaled correctly and centered
             var xOffset = 0
             var yOffset = 0
-            var strokeWidth: Float
+            val strokeWidth: Float
             if(this.height < this.width){
                 xOffset = (this.width - this.height) / 2
                 strokeWidth = (this.height / 150.0).toFloat()
@@ -79,10 +79,10 @@ class TriangleDrawer: JPanel(){
         //Draws the longest leg of the triangle as the bottom; the longest leg is at spot 2 and is always scaled to be the largest length
         drawLine(smallestCornerVal, largestCornerVal, largestCornerVal, largestCornerVal, colorMap[indices[2]]!!)
         //Draws the smallest leg of the triangle as the leg to the left of the bottom leg and scales it appropriately
-        val scaledSmallestSideLength = (largestCornerVal - smallestCornerVal) * sides[indices[0]] / sides[indices[2]]
+        val scaledSmallestSideLength = (largestCornerVal - smallestCornerVal) * sides[0] / sides[2]
         drawLine(smallestCornerVal, largestCornerVal, smallestCornerVal + scaledSmallestSideLength * Math.cos(triangleToRepresent!!.angles[indices[1]]), largestCornerVal - scaledSmallestSideLength * Math.sin(triangleToRepresent!!.angles[indices[1]]), colorMap[indices[0]]!!)
         //Draws the medium sized leg of the triangle as the leg to the right of the bottom leg and scales it appropriately
-        val scaledMediumSideLength = (largestCornerVal - smallestCornerVal) * sides[indices[1]] / sides[indices[2]]
+        val scaledMediumSideLength = (largestCornerVal - smallestCornerVal) * sides[1] / sides[2]
         drawLine(largestCornerVal, largestCornerVal, largestCornerVal - scaledMediumSideLength * Math.cos(triangleToRepresent!!.angles[indices[0]]), largestCornerVal - scaledMediumSideLength * Math.sin(triangleToRepresent!!.angles[indices[0]]), colorMap[indices[1]]!!)
 
         //TODO display actual triangle information and numbers here
