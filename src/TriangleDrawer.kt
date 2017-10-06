@@ -51,19 +51,21 @@ class TriangleDrawer: JPanel(){
             }
         }
 
+        //Because x and y scale the same, if either the x space or the y space is bigger, the offset will combat that so any drawing is scaled correctly and centered
+        var xOffset = 0
+        var yOffset = 0
+        val strokeWidth: Float
+        if(this.height < this.width){
+            xOffset = (this.width - this.height) / 2
+            yOffset = (this.height - sides[1] * Math.sin(triangleToRepresent!!.angles[indices[1]])).toInt() / -4 //TODO this doesn't really work; FIX
+            strokeWidth = (this.height / 150.0).toFloat()
+        }else{
+            yOffset = (this.width - this.height) / 2 //y offset must be negative
+            strokeWidth = (this.width / 150.0).toFloat()
+        }
+
         //A local function that draws a line given normalized coordinates between 0 and 1 and a color
         fun drawLine(x1: Double, y1: Double, x2: Double, y2: Double, color: Color){
-            //Because x and y scale the same, if either the x space or the y space is bigger, the offset will combat that so any drawing is scaled correctly and centered
-            var xOffset = 0
-            var yOffset = 0
-            val strokeWidth: Float
-            if(this.height < this.width){
-                xOffset = (this.width - this.height) / 2
-                strokeWidth = (this.height / 150.0).toFloat()
-            }else{
-                yOffset = (this.height - this.width) / 2
-                strokeWidth = (this.width / 150.0).toFloat()
-            }
             g.stroke = BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
             //Stores the previous color, changes the drawer's color to the desired color, draws the line with the new color, and then restores the old color to the drawer
             val prevColor = g.color
