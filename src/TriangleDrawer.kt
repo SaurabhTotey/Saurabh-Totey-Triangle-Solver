@@ -71,15 +71,22 @@ class TriangleDrawer: JPanel(){
         g.drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
 
         //Below draws text that displays triangle information TODO prettify output
-        g.font = Font(Font.MONOSPACED, Font.PLAIN, triangleWidth / 25)
-        g.color = colorMap[0]
+        g.font = Font(Font.MONOSPACED, Font.PLAIN, triangleWidth / 35)
         val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
+        val truncateLength = 5
+        fun formatString(toFormat: String): String{
+            return try{
+                toFormat.substring(0..truncateLength)
+            }catch(e: Exception){
+                formatString(toFormat +  " ")
+            }
+        }
         for(i in 0..2){
             g.color = colorMap[i]
-            g.drawString(stringParts[i] + " = " + triangleToRepresent!!.sides[i] + "; " + stringParts[i + 3] + " = " + triangleToRepresent!!.angles[i], 0, (i + 1) * triangleWidth / 25)
+            g.drawString(stringParts[i] + " = " + formatString(triangleToRepresent!!.sides[i].toString()) + " : " + stringParts[i + 3] + " = " + formatString(triangleToRepresent!!.angles[i].toString()), 0, (i + 1) * triangleWidth / 35)
         }
         g.color = Color.BLACK
-        g.drawString("Area = " + triangleToRepresent!!.area(), 0, 4 * triangleWidth / 25)
+        g.drawString("Area = " + triangleToRepresent!!.area(), 0, 4 * triangleWidth / 35)
     }
 
 }
