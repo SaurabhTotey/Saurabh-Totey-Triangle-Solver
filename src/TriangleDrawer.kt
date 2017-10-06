@@ -1,7 +1,4 @@
-import java.awt.BasicStroke
-import java.awt.Color
-import java.awt.Graphics
-import java.awt.Graphics2D
+import java.awt.*
 import javax.swing.JPanel
 
 /**
@@ -73,8 +70,16 @@ class TriangleDrawer: JPanel(){
         g.color = colorMap[indices[1]]
         g.drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
 
-        //TODO display actual triangle information and numbers here
-
+        //Below draws text that displays triangle information TODO prettify output
+        g.font = Font(Font.MONOSPACED, Font.PLAIN, triangleWidth / 25)
+        g.color = colorMap[0]
+        val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
+        for(i in 0..2){
+            g.color = colorMap[i]
+            g.drawString(stringParts[i] + " = " + triangleToRepresent!!.sides[i] + "; " + stringParts[i + 3] + " = " + triangleToRepresent!!.angles[i], 0, (i + 1) * triangleWidth / 25)
+        }
+        g.color = Color.BLACK
+        g.drawString("Area = " + triangleToRepresent!!.area(), 0, 4 * triangleWidth / 25)
     }
 
 }
