@@ -34,58 +34,44 @@ class TriangleDrawer: JPanel(){
      */
     override fun paint(graphics: Graphics?) {
 
-        //Boilerplate stuff that needs to happen; the super method of paint is called and the triangle is checked for existence and validity
+        //Boilerplate stuff that needs to happen; super paint method is called, triangle is checked for validity, and a graphics2d object is stored
         super.paint(graphics)
         if(triangleToRepresent == null || !triangleToRepresent!!.isSolved) return
         val g = graphics!!.create() as Graphics2D
 
-        //Below bubble-sorts (not the most efficient sort, but whatever) the sides and keeps the new order of the indices
+        //Below bubble-sorts (not the most efficient sort, but whatever) the sides and angles and keeps the new order of the indices
         var sides = triangleToRepresent!!.sides.clone()
+        var angles = triangleToRepresent!!.angles.clone()
         var indices = (0..2).toList().toTypedArray()
         for(i in 2 downTo 0){
             for(j in 1..i){
                 if(sides[j - 1] > sides[j]){
                     sides[j] = sides[j - 1].also{sides[j - 1] = sides[j]} //Swaps the sides
+                    angles[j] = angles[j - 1].also{angles[j - 1] = angles[j]} //Swaps the angles
                     indices[j] = indices[j - 1].also{indices[j - 1] = indices[j]} //Swaps the indices
                 }
             }
         }
 
-        //Because x and y scale the same, if either the x space or the y space is bigger, the offset will combat that so any drawing is scaled correctly and centered
-        var xOffset = 0
-        var yOffset = 0
-        val strokeWidth: Float
-        if(this.height < this.width){
-            xOffset = (this.width - this.height) / 2
-            yOffset = (this.height - sides[1] * Math.sin(triangleToRepresent!!.angles[indices[1]])).toInt() / -4 //TODO this doesn't really work; FIX
-            strokeWidth = (this.height / 150.0).toFloat()
-        }else{
-            yOffset = (this.width - this.height) / 2 //y offset must be negative
-            strokeWidth = (this.width / 150.0).toFloat()
-        }
+        //Define some constants that are useful for scaling and centering the triangle drawing
+        val triangleWidth = if(this.height < this.width) this.height else this.width - 10 //Is the triangle width because the largest side is always at the bottom and is scaled to this value
+        val triangleHeight = (sides[1] * Math.sin(angles[0]) * triangleWidth / sides[2]).toInt()
+        val leftX = (this.width - triangleWidth) / 2
+        val rightX = leftX + triangleWidth
+        val bottomY = (this.height - triangleHeight) / 2 + triangleHeight
+        val meetingX = leftX + (Math.cos(angles[1]) * sides[0] * triangleWidth / sides[2]).toInt()
+        val meetingY = bottomY - triangleHeight
 
-        //A local function that draws a line given normalized coordinates between 0 and 1 and a color
-        fun drawLine(x1: Double, y1: Double, x2: Double, y2: Double, color: Color){
-            g.stroke = BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
-            //Stores the previous color, changes the drawer's color to the desired color, draws the line with the new color, and then restores the old color to the drawer
-            val prevColor = g.color
-            g.color = color
-            g.drawLine(xOffset + (x1 * this.height).toInt(), yOffset + (y1 * this.height).toInt(), xOffset + (x2 * this.height).toInt(), yOffset + (y2 * this.height).toInt())
-            g.color = prevColor
-        }
+        //Sets the line thickness so that it scales with the available space
+        g.stroke = BasicStroke((triangleWidth / 200).toFloat(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
 
-        //Defines normalized coordinate bounds with which the drawer will operate; because coordinates are normalized between 0 and 1 to a square, corner val equally applies to x and y
-        val smallestCornerVal = 0.1
-        val largestCornerVal = 0.9
-
-        //Draws the longest leg of the triangle as the bottom; the longest leg is at spot 2 and is always scaled to be the largest length
-        drawLine(smallestCornerVal, largestCornerVal, largestCornerVal, largestCornerVal, colorMap[indices[2]]!!)
-        //Draws the smallest leg of the triangle as the leg to the left of the bottom leg and scales it appropriately
-        val scaledSmallestSideLength = (largestCornerVal - smallestCornerVal) * sides[0] / sides[2]
-        drawLine(smallestCornerVal, largestCornerVal, smallestCornerVal + scaledSmallestSideLength * Math.cos(triangleToRepresent!!.angles[indices[1]]), largestCornerVal - scaledSmallestSideLength * Math.sin(triangleToRepresent!!.angles[indices[1]]), colorMap[indices[0]]!!)
-        //Draws the medium sized leg of the triangle as the leg to the right of the bottom leg and scales it appropriately
-        val scaledMediumSideLength = (largestCornerVal - smallestCornerVal) * sides[1] / sides[2]
-        drawLine(largestCornerVal, largestCornerVal, largestCornerVal - scaledMediumSideLength * Math.cos(triangleToRepresent!!.angles[indices[0]]), largestCornerVal - scaledMediumSideLength * Math.sin(triangleToRepresent!!.angles[indices[0]]), colorMap[indices[1]]!!)
+        //Actually draws the triangle
+        g.color = colorMap[indices[2]]
+        g.drawLine(leftX, bottomY, rightX, bottomY) //Largest side is always horizontally oriented at the bottom
+        g.color = colorMap[indices[0]]
+        g.drawLine(leftX, bottomY, meetingX, meetingY) //Smallest side is always the left leg of the triangle
+        g.color = colorMap[indices[1]]
+        g.drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
 
         //TODO display actual triangle information and numbers here
 
