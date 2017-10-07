@@ -10,6 +10,20 @@ fun getIndicesSuchThat(predicate: (Int) -> Boolean): List<Int>{
 }
 
 /**
+ * A function that will convert radian angles to degrees
+ */
+fun asDegrees(radians: Double): Double{
+    return radians * 180 / PI
+}
+
+/**
+ * A function that will convert degrees angles to radians
+ */
+fun asRadians(degrees: Double): Double{
+    return degrees * PI / 180
+}
+
+/**
  * A class that defines a triangle
  * This is where all the math of the triangle is handled
  * This logic class uses radians as do all people of logic

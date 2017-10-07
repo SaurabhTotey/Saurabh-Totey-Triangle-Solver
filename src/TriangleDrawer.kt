@@ -15,6 +15,7 @@ class TriangleDrawer: JPanel(){
     val cColor = Color.ORANGE
     //Sets each index to a color
     val colorMap = hashMapOf(0 to aColor, 1 to bColor, 2 to cColor)
+    var isRadians = true
 
     /**
      * The triangle that the panel will draw
@@ -87,7 +88,7 @@ class TriangleDrawer: JPanel(){
         }
         for(i in 0..2){
             g.color = colorMap[i]
-            g.drawString(stringParts[i] + " = " + formatString(triangleToRepresent!!.sides[i].toString()) + " " + stringParts[i + 3] + " = " + formatString(triangleToRepresent!!.angles[i].toString()), lineSpacing / 2, (i + 1) * lineSpacing)
+            g.drawString(stringParts[i] + " = " + formatString(triangleToRepresent!!.sides[i].toString()) + " " + stringParts[i + 3] + " = " + if(isRadians){formatString(triangleToRepresent!!.angles[i].toString())}else{formatString(asDegrees(triangleToRepresent!!.angles[i]).toString())}, lineSpacing / 2, (i + 1) * lineSpacing)
         }
         g.color = Color.BLACK
         g.drawString(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent!!.area().toString()), lineSpacing / 2, 4 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces

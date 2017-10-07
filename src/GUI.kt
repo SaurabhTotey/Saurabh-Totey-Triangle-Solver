@@ -82,13 +82,13 @@ class MainWindow{
             anglesPane.background = Color.GRAY
             anglesPane.border = BorderFactory.createEtchedBorder()
             //Below makes the mode which selects whether the triangle inputs should be inputted/outputted as radians or degrees
-            var angleModeLabel = JLabel("Angle Input Mode:")
+            var angleModeLabel = JLabel("Angle Mode:")
             angleModeLabel.font = defaultFont
             anglesPane.add(angleModeLabel)
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
             var modeDropDownMenu = JComboBox(angleOptions)
             modeDropDownMenu.font = defaultFont
-            modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]}
+            modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]; this.refresh()}
             anglesPane.add(modeDropDownMenu, "push")
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
             val boxLength = 8
@@ -98,7 +98,7 @@ class MainWindow{
                 override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
                     radiansConversionBox.text = try{
-                        (mathEngine.evaluate(degreesConversionBox.text) * Math.PI / 180).toString()
+                        asRadians(mathEngine.evaluate(degreesConversionBox.text)).toString()
                     }catch(e: Exception){
                         ""
                     }
@@ -109,7 +109,7 @@ class MainWindow{
                 override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
                     degreesConversionBox.text = try{
-                        (mathEngine.evaluate(radiansConversionBox.text) * 180 / Math.PI).toString()
+                        asDegrees(mathEngine.evaluate(radiansConversionBox.text)).toString()
                     }catch(e: Exception){
                         ""
                     }
@@ -236,6 +236,13 @@ class MainWindow{
             var partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
             for(i in 0..2){
                 partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = mathEngine.evaluate(inputBoxes[i].text)
+            }
+            triangleDrawings[0].isRadians = this.isInRads
+            triangleDrawings[1].isRadians = this.isInRads
+            if(!this.isInRads){
+                for(i in 3..5){
+                    partsArray[i] = asRadians(partsArray[i])
+                }
             }
             Triangle(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5))
         }catch(e: Exception){
