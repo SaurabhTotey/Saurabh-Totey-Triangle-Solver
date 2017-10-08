@@ -87,10 +87,12 @@ class TriangleDrawer: JPanel(){
                 toFormat.toString().endsWith("0") && !toFormat.toString().endsWith(".0") -> formatString(toFormat.toString().substring(0 until toFormat.toString().length).toDouble())
                 toFormat.toString().length >= truncateLength + 1 -> {
                     var finalNum = toFormat
-                    if(toFormat.toString()[truncateLength + 1].toInt() >= 5){
+                    if(toFormat.toString().length >= truncateLength + 2 && toFormat.toString()[truncateLength + 1].toInt() >= 5){
                         finalNum += Math.pow(10.0, (-truncateLength).toDouble())
+                        formatString(finalNum.toString().substring(0..truncateLength).toDouble())
+                    }else{
+                        finalNum.toString().substring(0..truncateLength)
                     }
-                    finalNum.toString().substring(0..truncateLength)
                 }
                 else -> toFormat.toString() + " ".repeat(truncateLength + 1 - toFormat.toString().length)
             }
