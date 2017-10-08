@@ -82,16 +82,25 @@ class TriangleDrawer: JPanel(){
         val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
         val truncateLength = 5
         val lineSpacing = 2 * triangleWidth / 35
-        //TODO remake this function so it takes in a number and actually rounds it instead of truncating it
-        fun formatString(toFormat: String): String{
-            return if(toFormat.length >= truncateLength + 1) toFormat.substring(0..truncateLength) else formatString(toFormat +  " ")
+        fun formatString(toFormat: Double): String{
+            return when {
+                toFormat.toString().endsWith("0") && !toFormat.toString().endsWith(".0") -> formatString(toFormat.toString().substring(0 until toFormat.toString().length).toDouble())
+                toFormat.toString().length >= truncateLength + 1 -> {
+                    var finalNum = toFormat
+                    if(toFormat.toString()[truncateLength + 1].toInt() >= 5){
+                        finalNum += Math.pow(10.0, (-truncateLength).toDouble())
+                    }
+                    finalNum.toString().substring(0..truncateLength)
+                }
+                else -> toFormat.toString() + " ".repeat(truncateLength + 1 - toFormat.toString().length)
+            }
         }
         for(i in 0..2){
             g.color = colorMap[i]
-            g.drawString(stringParts[i] + " = " + formatString(triangleToRepresent!!.sides[i].toString()) + " " + stringParts[i + 3] + " = " + if(isRadians){formatString(triangleToRepresent!!.angles[i].toString())}else{formatString(asDegrees(triangleToRepresent!!.angles[i]).toString())}, lineSpacing / 2, (i + 1) * lineSpacing)
+            g.drawString(stringParts[i] + " = " + formatString(triangleToRepresent!!.sides[i]) + " " + stringParts[i + 3] + " = " + if(isRadians){formatString(triangleToRepresent!!.angles[i])}else{formatString(asDegrees(triangleToRepresent!!.angles[i]))}, lineSpacing / 2, (i + 1) * lineSpacing)
         }
         g.color = Color.BLACK
-        g.drawString(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent!!.area().toString()), lineSpacing / 2, 4 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces
+        g.drawString(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent!!.area()), lineSpacing / 2, 4 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces
     }
 
 }
