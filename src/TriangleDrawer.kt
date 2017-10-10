@@ -85,13 +85,11 @@ class TriangleDrawer: JPanel(){
         fun formatString(toFormat: Double): String{
             return when {
                 toFormat.toString().endsWith("0") && !toFormat.toString().endsWith(".0") -> formatString(toFormat.toString().substring(0 until toFormat.toString().length).toDouble())
-                toFormat.toString().length >= truncateLength + 1 -> {
-                    var finalNum = toFormat
+                toFormat.toString().length >= truncateLength + 1 -> { //TODO this will infinitely run if the number of non-decimal digits in the number is larger than truncateLength + 1
                     if(toFormat.toString().length >= truncateLength + 2 && toFormat.toString()[truncateLength + 1].toInt() >= 5){
-                        finalNum += Math.pow(10.0, (-truncateLength).toDouble())
-                        formatString(finalNum.toString().substring(0..truncateLength).toDouble())
+                        formatString((toFormat + Math.pow(10.0, (-truncateLength).toDouble())).toString().substring(0..truncateLength).toDouble())
                     }else{
-                        finalNum.toString().substring(0..truncateLength)
+                        toFormat.toString().substring(0..truncateLength)
                     }
                 }
                 else -> toFormat.toString() + " ".repeat(truncateLength + 1 - toFormat.toString().length)
