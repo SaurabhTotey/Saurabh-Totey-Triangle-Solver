@@ -155,15 +155,21 @@ class MainWindow{
             //Below is where the user enters their data
             ioPane.add(JLabel(" "), "height 20%!, wrap")
             val boxWidth = 8
-            inputBoxes = Array(3, {_ -> JTextField(boxWidth)}).map{it.font = defaultFont; it.horizontalAlignment = JTextField.CENTER; it.addKeyListener(object: KeyListener{
-                override fun keyPressed(e: KeyEvent?) {}override fun keyTyped(e: KeyEvent?) {}
-                override fun keyReleased(e: KeyEvent?) {
-                    refresh()
-                }
-            }); it}.toTypedArray()
-            typeBoxes = Array(3, {_ -> JComboBox(stringParts)}).map{it.font = defaultFont; it}.toTypedArray()
+            inputBoxes = Array(3, {_ -> JTextField(boxWidth)})
+            inputBoxes.forEach{
+                it.font = defaultFont
+                it.horizontalAlignment = JTextField.CENTER
+                it.addKeyListener(object: KeyListener{
+                    override fun keyPressed(e: KeyEvent?) {}override fun keyTyped(e: KeyEvent?) {}
+                    override fun keyReleased(e: KeyEvent?) {
+                        refresh()
+                    }
+                })
+            }
             var willChangeTypeIO = true //A lock that makes sure that if the typeIO box tries to change the typeboxes, the typeboxes won't change the typeIO box back
-            typeBoxes.map{ //Mapped separately because it references type boxes, and if it was mapped in the above line, typeboxes doesn't exist yet as it is being constructed
+            typeBoxes = Array(3, {_ -> JComboBox(stringParts)})
+            typeBoxes.forEach{
+                it.font = defaultFont
                 it.addActionListener{
                     if(willChangeTypeIO){ //Checks that the typebox is allowed to modify the typeIO box
                         var partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
@@ -173,7 +179,7 @@ class MainWindow{
                         typeIO.text = TriangleType(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5)).toString()
                     }
                     refresh()
-                }; it
+                }
             }
             typeIO.addKeyListener(object: KeyListener{
                 override fun keyPressed(e: KeyEvent?){}
@@ -237,8 +243,6 @@ class MainWindow{
             for(i in 0..2){
                 partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = mathEngine.evaluate(inputBoxes[i].text)
             }
-            triangleDrawings[0].isRadians = this.isInRads
-            triangleDrawings[1].isRadians = this.isInRads
             if(!this.isInRads){
                 for(i in 3..5){
                     partsArray[i] = asRadians(partsArray[i])
@@ -250,9 +254,9 @@ class MainWindow{
         }
         if(inputted.isValid()){
             val solutions = inputted.solutions()
-            triangleDrawings[0].triangleToRepresent = solutions[0]
-            if(solutions.size == 2){
-                triangleDrawings[1].triangleToRepresent = solutions[1]
+            (0 until solutions.size).filter{solutions[it].isValid()}.forEach{
+                triangleDrawings[it].triangleToRepresent = solutions[it]
+                triangleDrawings[it].isRadians = this.isInRads
             }
         }
         for(drawing in triangleDrawings){
