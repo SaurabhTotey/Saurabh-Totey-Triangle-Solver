@@ -97,8 +97,24 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>){
                 reSolve() //Will solve the triangle as if it were ASA
             }
             ASS -> {
-                solved = arrayOf(this.copy(), this.copy()) //Because a triangle given by ASS doesn't define a unique triangle, there might be two possible solutions
-                //TODO solve this and give both possible solutions
+                val knownSides = getIndicesSuchThat{hasBeenInitialized(primary.sides[it])}
+                val knownAngle = getIndicesSuchThat{hasBeenInitialized(primary.angles[it])}[0]
+                val unknownOppositeAngle = knownSides.filter{it != knownAngle}[0]
+                val ASSType = primary.sides[knownAngle] / primary.sides[unknownOppositeAngle] * sin(primary.angles[knownAngle])
+                when{
+                    ASSType > 1 -> solved = arrayOf()
+                    primary.sides[knownAngle] >= primary.sides[unknownOppositeAngle] -> {
+                        primary.angles[unknownOppositeAngle] = asin(ASSType)
+                        reSolve()
+                    }
+                    else -> {
+                        primary = solved[0]
+                        var secondary = this.copy()
+                        primary.angles[unknownOppositeAngle] = asin(ASSType)
+                        secondary.angles[unknownOppositeAngle] = 180 - asin(ASSType)
+                        solved = arrayOf(primary.solutions()[0], secondary.solutions()[0])
+                    }
+                }
             }
         }
         return solved
@@ -172,11 +188,13 @@ class TriangleType{
                     arrayOf(Part.ANGLE, Part.ANGLE, Part.SIDE)
 
             2 ->
-                //If the angle opposite the uninitialized side is initialized, the triangle is SAS, otherwise, it is ASS
-                if(hasBeenInitialized(angles[getIndicesSuchThat{it !in initializedSides}[0]]))
-                    arrayOf(Part.SIDE, Part.ANGLE, Part.SIDE)
-                else
-                    arrayOf(Part.ANGLE, Part.SIDE, Part.SIDE)
+                when{
+                    //If the angle opposite the uninitialized side is initialized, the triangle is SAS, or if all 3 angles are initialized
+                    hasBeenInitialized(angles[getIndicesSuchThat{it !in initializedSides}[0]]) || initializedAngles.size == 3 -> arrayOf(Part.SIDE, Part.ANGLE, Part.SIDE)
+                    //If there are two angles and two sides, but there is no included angle
+                    initializedAngles.size > 1 -> arrayOf(Part.ANGLE, Part.ANGLE, Part.SIDE)
+                    else -> arrayOf(Part.ANGLE, Part.SIDE, Part.SIDE)
+                }
 
             0 -> arrayOf(Part.ANGLE, Part.ANGLE, Part.ANGLE)
             else -> this.type
@@ -216,21 +234,6 @@ class TriangleType{
      */
     override fun equals(other: Any?): Boolean {
         return other is TriangleType && (Arrays.equals(other.type, this.type) || Arrays.equals(other.type, this.type.reversedArray()))
-    }
-
-    /**
-     * Defines hashCode so that this object may behave consistently
-     * Also so that IntelliJ doesn't complain
-     * TODO This current implementation does not work as it does not account for palindromes
-     */
-    override fun hashCode(): Int{
-        return this.type.map{
-            when(it){
-                Part.SIDE -> "1"
-                Part.ANGLE -> "0"
-                Part.UNKNOWN -> "9"
-            }
-        }.toString().toInt()
     }
 
 }

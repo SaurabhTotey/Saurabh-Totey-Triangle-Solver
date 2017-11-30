@@ -83,16 +83,20 @@ class TriangleDrawer: JPanel(){
         val truncateLength = 5
         val lineSpacing = 2 * triangleWidth / 35
         fun formatString(toFormat: Double): String{
+            val number: String = toFormat.toString()
             return when {
-                toFormat.toString().endsWith("0") && !toFormat.toString().endsWith(".0") -> formatString(toFormat.toString().substring(0 until toFormat.toString().length).toDouble())
-                toFormat.toString().length >= truncateLength + 1 -> { //TODO this will infinitely run if the number of non-decimal digits in the number is larger than truncateLength + 1
-                    if(toFormat.toString().length >= truncateLength + 2 && toFormat.toString()[truncateLength + 1].toInt() >= 5){
+                number.endsWith("0") && !number.endsWith(".0") -> formatString(number.substring(0 until number.length).toDouble())
+                number.length >= truncateLength + 1 -> {
+                    if(toFormat > "9".repeat(truncateLength - 1).toDouble()){
+                        val power = number.length - 1
+                        number[0] + "." + number.replace(".", "").substring(1, number.length - power.toString().length - 1) + "E" + power //TODO that line doesn't actually probably work well
+                    }else if(number.length >= truncateLength + 2 && number[truncateLength + 1].toInt() >= 5){
                         formatString((toFormat + Math.pow(10.0, (-truncateLength).toDouble())).toString().substring(0..truncateLength).toDouble())
                     }else{
-                        toFormat.toString().substring(0..truncateLength)
+                        number.substring(0..truncateLength)
                     }
                 }
-                else -> toFormat.toString() + " ".repeat(truncateLength + 1 - toFormat.toString().length)
+                else -> number + " ".repeat(truncateLength + 1 - number.length)
             }
         }
         for(i in 0..2){
