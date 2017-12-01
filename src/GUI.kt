@@ -78,22 +78,22 @@ class MainWindow{
              * ANGLE PANE
              * Makes the angles pane which handles angle mode and conversions of angles
              */
-            var anglesPane = JPanel(MigLayout())
+            val anglesPane = JPanel(MigLayout())
             anglesPane.background = Color.GRAY
             anglesPane.border = BorderFactory.createEtchedBorder()
             //Below makes the mode which selects whether the triangle inputs should be inputted/outputted as radians or degrees
-            var angleModeLabel = JLabel("Angle Mode:")
+            val angleModeLabel = JLabel("Angle Mode:")
             angleModeLabel.font = defaultFont
             anglesPane.add(angleModeLabel)
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
-            var modeDropDownMenu = JComboBox(angleOptions)
+            val modeDropDownMenu = JComboBox(angleOptions)
             modeDropDownMenu.font = defaultFont
             modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]; this.refresh()}
             anglesPane.add(modeDropDownMenu, "push")
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
             val boxLength = 8
-            var degreesConversionBox = JTextField(boxLength)
-            var radiansConversionBox = JTextField(boxLength)
+            val degreesConversionBox = JTextField(boxLength)
+            val radiansConversionBox = JTextField(boxLength)
             degreesConversionBox.addKeyListener(object: KeyListener{
                 override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
@@ -118,9 +118,9 @@ class MainWindow{
             })
             degreesConversionBox.font = defaultFont
             radiansConversionBox.font = defaultFont
-            var degreesLabel = JLabel("°")
-            var radiansLabel = JLabel("Rad")
-            var equalsLabel = JLabel(" = ")
+            val degreesLabel = JLabel("°")
+            val radiansLabel = JLabel("Rad")
+            val equalsLabel = JLabel(" = ")
             degreesLabel.font = defaultFont
             radiansLabel.font = defaultFont
             equalsLabel.font = defaultFont
@@ -129,7 +129,7 @@ class MainWindow{
             anglesPane.add(equalsLabel, "")
             anglesPane.add(radiansConversionBox, "")
             anglesPane.add(radiansLabel, "push")
-            var helpButton = JButton()
+            val helpButton = JButton()
             helpButton.icon = ImageIcon(ImageIO.read(File("res/HelpButton.png")).getScaledInstance(screenX / 90, screenX / 90, Image.SCALE_SMOOTH))
             anglesPane.add(helpButton)
             frame.add(anglesPane, "dock south, height 10%!, width 100%!")
@@ -138,17 +138,17 @@ class MainWindow{
              * IO PANE
              * Where the user can input their triangle information and where a little bit of triangle information is displayed
              */
-            var ioPane = JPanel(MigLayout("fillx"))
+            val ioPane = JPanel(MigLayout("fillx"))
             ioPane.background = Color.LIGHT_GRAY
             ioPane.border = BorderFactory.createEtchedBorder()
-            var paneLabel = JLabel("Triangle Information")
+            val paneLabel = JLabel("Triangle Information")
             paneLabel.font = titleFont
             ioPane.add(paneLabel, "span, align center, wrap")
             ioPane.add(JLabel(" "), "span, wrap") //Just for space
-            var typeLabel = JLabel("Triangle Type")
+            val typeLabel = JLabel("Triangle Type")
             typeLabel.font = defaultFont
             ioPane.add(typeLabel, "span, align center, wrap")
-            var typeIO = JTextField(13)
+            val typeIO = JTextField(13)
             typeIO.horizontalAlignment = JTextField.CENTER
             typeIO.font = defaultFont
             ioPane.add(typeIO, "span, align center, wrap")
@@ -172,7 +172,7 @@ class MainWindow{
                 it.font = defaultFont
                 it.addActionListener{
                     if(willChangeTypeIO){ //Checks that the typebox is allowed to modify the typeIO box
-                        var partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
+                        val partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
                         for(i in 0..2){
                             partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = 1.0
                         }
@@ -238,8 +238,8 @@ class MainWindow{
      * Updates the drawings
      */
     fun refresh(){
-        var inputted: Triangle = try{
-            var partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
+        val inputted: Triangle = try{
+            val partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
             for(i in 0..2){
                 partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = mathEngine.evaluate(inputBoxes[i].text)
             }

@@ -9,7 +9,7 @@ val sqrt = Function("sqrt", 1)
  * There is a separate class for this evaluator because I plan to make my own implementation of this later,
  *   and the default double evaluator doesn't have a sqrt function which is what is added here
  */
-class MathEvaluator: DoubleEvaluator({var params = DoubleEvaluator.getDefaultParameters(); params.add(sqrt); params}()) {
+class MathEvaluator: DoubleEvaluator({val params = DoubleEvaluator.getDefaultParameters(); params.add(sqrt); params}()) {
 
     /**
      * If the sqrt function is used, will return the square root of the function

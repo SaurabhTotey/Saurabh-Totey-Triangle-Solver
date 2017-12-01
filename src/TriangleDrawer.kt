@@ -10,11 +10,11 @@ class TriangleDrawer: JPanel(){
     /**
      * The color pallete of the colors to be used for drawing the triangle
      */
-    val aColor = Color.BLUE
-    val bColor = Color.RED
-    val cColor = Color.ORANGE
+    private val aColor = Color.BLUE!!
+    private val bColor = Color.RED!!
+    private val cColor = Color.ORANGE!!
     //Sets each index to a color
-    val colorMap = hashMapOf(0 to aColor, 1 to bColor, 2 to cColor)
+    private val colorMap = hashMapOf(0 to aColor, 1 to bColor, 2 to cColor)
     var isRadians = true
 
     /**
@@ -38,9 +38,9 @@ class TriangleDrawer: JPanel(){
         val g = graphics!!.create() as Graphics2D
 
         //Below bubble-sorts (not the most efficient sort, but whatever) the sides and angles and keeps the new order of the indices
-        var sides = triangleToRepresent!!.sides.clone()
-        var angles = triangleToRepresent!!.angles.clone()
-        var indices = (0..2).toList().toTypedArray()
+        val sides = triangleToRepresent!!.sides.clone()
+        val angles = triangleToRepresent!!.angles.clone()
+        val indices = (0..2).toList().toTypedArray()
         for(i in 2 downTo 0){
             for(j in 1..i){
                 if(sides[j - 1] > sides[j]){
@@ -72,6 +72,7 @@ class TriangleDrawer: JPanel(){
         g.drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
 
         //Draws black dots on all the line intersections so the triangle doesn't look ugly
+        //TODO instead of drawing black dots, draw dots of the color of the angle (eg. the dot at the vertex opposite side a would be in the aColor)
         g.color = Color.BLACK
         g.drawLine(leftX, bottomY, leftX, bottomY)
         g.drawLine(rightX, bottomY, rightX, bottomY)
@@ -88,8 +89,8 @@ class TriangleDrawer: JPanel(){
                 number.endsWith("0") && !number.endsWith(".0") -> formatString(number.substring(0 until number.length).toDouble())
                 number.length >= truncateLength + 1 -> {
                     if(toFormat > "9".repeat(truncateLength - 1).toDouble()){
-                        val power = number.length - 1
-                        number[0] + "." + number.replace(".", "").substring(1, number.length - power.toString().length - 1) + "E" + power //TODO that line doesn't actually probably work well
+                        val power = number.indexOf(".") - 1
+                        number[0] + "." + number.replace(".", "").substring(1, truncateLength - power.toString().length - 1) + "E" + power //TODO this line truncates but doesn't round
                     }else if(number.length >= truncateLength + 2 && number[truncateLength + 1].toInt() >= 5){
                         formatString((toFormat + Math.pow(10.0, (-truncateLength).toDouble())).toString().substring(0..truncateLength).toDouble())
                     }else{

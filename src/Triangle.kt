@@ -43,7 +43,7 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>){
      * The type of the triangle
      * Is dynamically calculated
      */
-    val type: TriangleType
+    private val type: TriangleType
         get() = TriangleType(this.sides, this.angles)
     /**
      * Whether the triangle has been solved completely
@@ -134,7 +134,7 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>){
     /**
      * Creates a copy of this triangle with the same initial properties
      */
-    fun copy(): Triangle{
+    private fun copy(): Triangle{
         var clone = Triangle()
         clone.sides = this.sides.copyOf()
         clone.angles = this.angles.copyOf()
