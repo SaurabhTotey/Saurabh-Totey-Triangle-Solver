@@ -32,7 +32,7 @@ val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
  * Triangle drawing is handled in TriangleDrawer.kt
  * The constructor of this object only contains the GUI layout and behaviour, which, due to the way Java Swing works, is basically unreadable
  */
-class MainWindow{
+class MainWindow {
 
     private lateinit var frame: JFrame
     private lateinit var defaultFont: Font
@@ -48,8 +48,8 @@ class MainWindow{
      * Makes and displays the window on the Swing thread
      * Defines graphics layout and behaviour
      */
-    init{
-        SwingUtilities.invokeAndWait{
+    init {
+        SwingUtilities.invokeAndWait {
             /*
              * FRAME
              * Makes the frame with the title and the icon
@@ -65,7 +65,7 @@ class MainWindow{
             val screenX = allDevices[0].defaultConfiguration.bounds.width
             val screenY = allDevices[0].defaultConfiguration.bounds.height
             frame.setBounds(screenX / 4 + topLeftX, screenY / 4 + topLeftY, screenX / 2, screenY / 2)
-            frame.addComponentListener(object: ComponentAdapter() {
+            frame.addComponentListener(object : ComponentAdapter() {
                 override fun componentResized(e: ComponentEvent?) {
                     refresh()
                 }
@@ -88,29 +88,31 @@ class MainWindow{
             val angleOptions = arrayOf("Radians (Rad)", "Degrees (°)")
             val modeDropDownMenu = JComboBox(angleOptions)
             modeDropDownMenu.font = defaultFont
-            modeDropDownMenu.addActionListener{actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]; this.refresh()}
+            modeDropDownMenu.addActionListener { actionEvent -> this.isInRads = (actionEvent.source as JComboBox<*>).selectedItem as String == angleOptions[0]; this.refresh() }
             anglesPane.add(modeDropDownMenu, "push")
             //Below makes the conversion boxes which will allow users to either enter in a radian value or a degrees value, and the other value will get updated to be equivalent
             val boxLength = 8
             val degreesConversionBox = JTextField(boxLength)
             val radiansConversionBox = JTextField(boxLength)
-            degreesConversionBox.addKeyListener(object: KeyListener{
-                override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
+            degreesConversionBox.addKeyListener(object : KeyListener {
+                override fun keyTyped(p0: KeyEvent?) {}
+                override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
-                    radiansConversionBox.text = try{
+                    radiansConversionBox.text = try {
                         asRadians(mathEngine.evaluate(degreesConversionBox.text)).toString()
-                    }catch(e: Exception){
+                    } catch (e: Exception) {
                         ""
                     }
                     radiansConversionBox.caretPosition = 0
                 }
             })
-            radiansConversionBox.addKeyListener(object: KeyListener{
-                override fun keyTyped(p0: KeyEvent?) {} override fun keyPressed(p0: KeyEvent?) {}
+            radiansConversionBox.addKeyListener(object : KeyListener {
+                override fun keyTyped(p0: KeyEvent?) {}
+                override fun keyPressed(p0: KeyEvent?) {}
                 override fun keyReleased(p0: KeyEvent?) {
-                    degreesConversionBox.text = try{
+                    degreesConversionBox.text = try {
                         asDegrees(mathEngine.evaluate(radiansConversionBox.text)).toString()
-                    }catch(e: Exception){
+                    } catch (e: Exception) {
                         ""
                     }
                     degreesConversionBox.caretPosition = 0
@@ -155,25 +157,26 @@ class MainWindow{
             //Below is where the user enters their data
             ioPane.add(JLabel(" "), "height 20%!, wrap")
             val boxWidth = 8
-            inputBoxes = Array(3, {_ -> JTextField(boxWidth)})
-            inputBoxes.forEach{
+            inputBoxes = Array(3, { _ -> JTextField(boxWidth) })
+            inputBoxes.forEach {
                 it.font = defaultFont
                 it.horizontalAlignment = JTextField.CENTER
-                it.addKeyListener(object: KeyListener{
-                    override fun keyPressed(e: KeyEvent?) {}override fun keyTyped(e: KeyEvent?) {}
+                it.addKeyListener(object : KeyListener {
+                    override fun keyPressed(e: KeyEvent?) {}
+                    override fun keyTyped(e: KeyEvent?) {}
                     override fun keyReleased(e: KeyEvent?) {
                         refresh()
                     }
                 })
             }
             var willChangeTypeIO = true //A lock that makes sure that if the typeIO box tries to change the typeboxes, the typeboxes won't change the typeIO box back
-            typeBoxes = Array(3, {_ -> JComboBox(stringParts)})
-            typeBoxes.forEach{
+            typeBoxes = Array(3, { _ -> JComboBox(stringParts) })
+            typeBoxes.forEach {
                 it.font = defaultFont
-                it.addActionListener{
-                    if(willChangeTypeIO){ //Checks that the typebox is allowed to modify the typeIO box
-                        val partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
-                        for(i in 0..2){
+                it.addActionListener {
+                    if (willChangeTypeIO) { //Checks that the typebox is allowed to modify the typeIO box
+                        val partsArray = Array(6, { _ -> -1.0 }) //Indexes 0..2 are sides, indexes 3..5 are angles
+                        for (i in 0..2) {
                             partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = 1.0
                         }
                         typeIO.text = TriangleType(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5)).toString()
@@ -181,46 +184,48 @@ class MainWindow{
                     refresh()
                 }
             }
-            typeIO.addKeyListener(object: KeyListener{
-                override fun keyPressed(e: KeyEvent?){}
+            typeIO.addKeyListener(object : KeyListener {
+                override fun keyPressed(e: KeyEvent?) {}
                 /**
                  * Formats key inputs such that they are only A or S
                  */
-                override fun keyTyped(e: KeyEvent?){
-                    try{
-                        if("as".contains(e?.keyChar!!.toLowerCase())){
+                override fun keyTyped(e: KeyEvent?) {
+                    try {
+                        if ("as".contains(e?.keyChar!!.toLowerCase())) {
                             e.keyChar = e.keyChar.toUpperCase()
-                        }else e.consume()
-                    }catch(er: Exception){}
+                        } else e.consume()
+                    } catch (er: Exception) {
+                    }
                 }
+
                 /**
                  * Adjusts input triangle part boxes such that they match the given triangle type
                  */
                 override fun keyReleased(e: KeyEvent?) {
-                    if(typeIO.text.length > 3){
+                    if (typeIO.text.length > 3) {
                         typeIO.text = typeIO.text.substring(0..2)
                     }
-                    if(typeIO.text.length == 3){
+                    if (typeIO.text.length == 3) {
                         willChangeTypeIO = false
-                        if(typeIO.text[1] != typeIO.text[0] && typeIO.text[0] == typeIO.text[2]){   //If the middle char is unique
-                            for(i in 0..2){
-                                typeBoxes[i].selectedIndex = i + if(typeIO.text[i] == 'A') 3 else 0
+                        if (typeIO.text[1] != typeIO.text[0] && typeIO.text[0] == typeIO.text[2]) {   //If the middle char is unique
+                            for (i in 0..2) {
+                                typeBoxes[i].selectedIndex = i + if (typeIO.text[i] == 'A') 3 else 0
                             }
-                        }else{
+                        } else {
                             var sideIndex = 0
                             var angleIndex = 3
-                            for(i in 0..2){
-                                typeBoxes[i].selectedIndex = if(typeIO.text[i] == 'S') sideIndex++ else angleIndex++
+                            for (i in 0..2) {
+                                typeBoxes[i].selectedIndex = if (typeIO.text[i] == 'S') sideIndex++ else angleIndex++
                             }
                         }
                         willChangeTypeIO = true
                     }
                 }
             })
-            for(i in 0..2){
+            for (i in 0..2) {
                 typeBoxes[i].selectedIndex = i
             }
-            for(i in 0..2){
+            for (i in 0..2) {
                 ioPane.add(JLabel(), "pushx, growx") //Added before and after information so that it is spaced in center
                 ioPane.add(inputBoxes[i], "growx")
                 ioPane.add(typeBoxes[i], "growx")
@@ -237,31 +242,31 @@ class MainWindow{
      * What the window should do every time it needs to update or refresh itself
      * Updates the drawings
      */
-    fun refresh(){
-        val inputted: Triangle = try{
-            val partsArray = Array(6, {_-> -1.0}) //Indexes 0..2 are sides, indexes 3..5 are angles
-            for(i in 0..2){
+    fun refresh() {
+        val inputted: Triangle = try {
+            val partsArray = Array(6, { _ -> -1.0 }) //Indexes 0..2 are sides, indexes 3..5 are angles
+            for (i in 0..2) {
                 partsArray[stringParts.indexOf(typeBoxes[i].selectedItem as String)] = mathEngine.evaluate(inputBoxes[i].text)
             }
-            if(!this.isInRads){
-                for(i in 3..5){
+            if (!this.isInRads) {
+                for (i in 3..5) {
                     partsArray[i] = asRadians(partsArray[i])
                 }
             }
             Triangle(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5))
-        }catch(e: Exception){
+        } catch (e: Exception) {
             Triangle()
         }
-        if(inputted.isValid()){
+        if (inputted.isValid()) {
             val solutions = inputted.solutions()
-            (0 until solutions.size).filter{solutions[it].isValid()}.forEach{
+            (0 until solutions.size).filter { solutions[it].isValid() }.forEach {
                 triangleDrawings[it].triangleToRepresent = solutions[it]
                 triangleDrawings[it].isRadians = this.isInRads
             }
         }
-        for(drawing in triangleDrawings){
+        for (drawing in triangleDrawings) {
             frame.remove(drawing)
-            if(drawing.triangleToRepresent != null){
+            if (drawing.triangleToRepresent != null) {
                 frame.add(drawing, "grow, push, wrap")
             }
         }
