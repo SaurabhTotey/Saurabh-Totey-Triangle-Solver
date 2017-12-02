@@ -88,13 +88,16 @@ class TriangleDrawer : JPanel() {
             return when {
                 number.endsWith("0") && !number.endsWith(".0") -> formatString(number.substring(0 until number.length).toDouble())
                 number.length >= truncateLength + 1 -> {
-                    if (toFormat > "9".repeat(truncateLength - 1).toDouble()) {
-                        val power = number.indexOf(".") - 1
-                        number[0] + "." + number.replace(".", "").substring(1, truncateLength - power.toString().length - 1) + "E" + power //TODO this line truncates but doesn't round
-                    } else if (number.length >= truncateLength + 2 && number[truncateLength + 1].toInt() >= 5) {
-                        formatString((toFormat + Math.pow(10.0, (-truncateLength).toDouble())).toString().substring(0..truncateLength).toDouble())
-                    } else {
-                        number.substring(0..truncateLength)
+                    when {
+                        //Is turned to string first because toInt for a char returns char code
+                        number.length >= truncateLength + 2 && number[truncateLength + 1] != '.' && (number[truncateLength + 1].toString().toInt() >= 5) -> {
+                            formatString((number.substring(0 until truncateLength) + (number[truncateLength].toInt() + 1)).toDouble())
+                        }
+                        toFormat > "9".repeat(truncateLength - 1).toDouble() -> {
+                            val power = number.indexOf(".") - 1
+                            number[0] + "." + number.replace(".", "").substring(1, truncateLength - power.toString().length - 1) + "E" + power //TODO this line truncates but doesn't round
+                        }
+                        else -> number.substring(0..truncateLength)
                     }
                 }
                 else -> number + " ".repeat(truncateLength + 1 - number.length)
