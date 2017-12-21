@@ -100,9 +100,8 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>) {
                 val knownSides = getIndicesSuchThat { hasBeenInitialized(primary.sides[it]) }
                 val knownAngle = getIndicesSuchThat { hasBeenInitialized(primary.angles[it]) }[0]
                 val unknownOppositeAngle = knownSides.filter { it != knownAngle }[0]
-                val ASSType = primary.sides[knownAngle] / primary.sides[unknownOppositeAngle] * sin(primary.angles[knownAngle])
+                val ASSType = primary.sides[unknownOppositeAngle] / primary.sides[knownAngle] * sin(primary.angles[knownAngle])
                 when {
-                    ASSType > 1 -> solved = arrayOf()
                     primary.sides[knownAngle] >= primary.sides[unknownOppositeAngle] -> {
                         primary.angles[unknownOppositeAngle] = asin(ASSType)
                         reSolve()
