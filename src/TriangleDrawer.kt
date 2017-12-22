@@ -71,12 +71,13 @@ class TriangleDrawer : JPanel() {
         g.color = colorMap[indices[1]]
         g.drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
 
-        //Draws black dots on all the line intersections so the triangle doesn't look ugly
-        //TODO instead of drawing black dots, draw dots of the color of the angle (eg. the dot at the vertex opposite side a would be in the aColor)
-        g.color = Color.BLACK
-        g.drawLine(leftX, bottomY, leftX, bottomY)
-        g.drawLine(rightX, bottomY, rightX, bottomY)
-        g.drawLine(meetingX, meetingY, meetingX, meetingY)
+        //Draws all the dots of the triangle and corresponds the colors of the dots with the opposite side's color
+        g.color = colorMap[indices[2]]
+        g.drawLine(meetingX, meetingY, meetingX, meetingY) //Draws the dot at the top with the same color as the largest side
+        g.color = colorMap[indices[0]]
+        g.drawLine(rightX, bottomY, rightX, bottomY) //Draws the dot at the right with the same color as the left leg
+        g.color = colorMap[indices[1]]
+        g.drawLine(leftX, bottomY, leftX, bottomY) //Draws the dot at the left with the same color as the right leg
 
         //Below draws text that displays triangle information
         g.font = Font(Font.MONOSPACED, Font.PLAIN, triangleWidth / 35)
