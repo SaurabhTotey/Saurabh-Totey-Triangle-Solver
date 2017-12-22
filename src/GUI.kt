@@ -258,10 +258,14 @@ class MainWindow {
             Triangle()
         }
         if (inputted.isValid()) {
-            val solutions = inputted.solutions()
-            (0 until solutions.size).filter { solutions[it].isValid() }.forEach {
-                triangleDrawings[it].triangleToRepresent = solutions[it]
-                triangleDrawings[it].isRadians = this.isInRads
+            triangleDrawings.forEach {
+                it.triangleToRepresent = null
+                it.isRadians = this.isInRads
+            }
+            try {
+                val solutions = inputted.solutions()
+                (0 until solutions.size).filter { solutions[it].isValid() }.forEach { triangleDrawings[it].triangleToRepresent = solutions[it] }
+            } catch (e: Exception) {
             }
         }
         for (drawing in triangleDrawings) {
