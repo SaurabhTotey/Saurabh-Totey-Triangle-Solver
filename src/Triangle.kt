@@ -34,9 +34,24 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>) {
 
     /**
      * This just figures out if the triangle is valid or not with the given inputs
+     * If the triangle isn't solved, it calls this method on the solutions of the triangles
      */
     fun isValid(): Boolean {
-        return true //TODO make this
+        if (this.isSolved) {
+            val acceptableError = 0.005
+            val anglesAddToPi = this.angles.sum() < PI + acceptableError && this.angles.sum() > PI - acceptableError
+            val sidesFulfillLegInequality = this.sides[0] < this.sides[1] + this.sides[2] && this.sides[1] < this.sides[0] + this.sides[2] && this.sides[2] < this.sides[0] + this.sides[1]
+            return anglesAddToPi && sidesFulfillLegInequality
+        } else {
+            return try {
+                //If any of the solutions aren't valid, the unsolved triangle isn't valid
+                this.solutions().filter { !it.isSolved || !it.isValid() } .forEach { return false }
+                true
+            } catch (e: Exception) {
+                //The triangle can't be made into a solution and is thus invalid
+                false
+            }
+        }
     }
 
     /**
