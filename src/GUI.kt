@@ -131,9 +131,6 @@ class MainWindow {
             anglesPane.add(equalsLabel, "")
             anglesPane.add(radiansConversionBox, "")
             anglesPane.add(radiansLabel, "push")
-            val helpButton = JButton()  //TODO add an action to this button that shows a screen with information
-            helpButton.icon = ImageIcon(ImageIO.read(File("res/HelpButton.png")).getScaledInstance(screenX / 90, screenX / 90, Image.SCALE_SMOOTH))
-            anglesPane.add(helpButton)
             frame.add(anglesPane, "dock south, height 10%!, width 100%!")
 
             /*
