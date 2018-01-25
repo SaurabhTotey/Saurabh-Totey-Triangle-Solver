@@ -12,8 +12,15 @@
             <p>testarooni</p>
         </div>
     </div>
-    <div style="width:100%; background-color:gray; margin-top:-20px; clear:both" id="anglesPane">
-        <p>testarooni 2</p>
+    <div style="width:100%; background-color:gray; margin-top:-20px; display:table; padding:5px 0 5px 0" id="anglesPane">
+        <span style="display:table-cell; width:1%"></span>
+        <p style="width:5%; display:table-cell">Angle Mode: </p>
+        <select style="display:table-cell">
+            <option value="Radians">Radians</option>
+            <option value="Degrees">Degrees</option>
+        </select>
+        <span style="display:table-cell; width:30%"></span>
+        <input style="display:table-cell" type="text"/>
     </div>
 </body>
 <script src="production/Triangle-Solver/lib/kotlin.js"></script>
