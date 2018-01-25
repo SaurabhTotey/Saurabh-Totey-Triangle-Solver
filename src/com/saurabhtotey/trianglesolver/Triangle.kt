@@ -1,6 +1,5 @@
 package com.saurabhtotey.trianglesolver
 
-import kotlin.js.Math.pow //This import is used instead of import kotlin.math.pow because that doesn't work
 import kotlin.math.*
 
 val hasBeenInitialized = { a: Double -> a > 0 } //A function that will return whether a triangle angle or side has been initialized
@@ -47,7 +46,7 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>) {
         } else {
             return try {
                 //If any of the solutions aren't valid, the unsolved triangle isn't valid
-                this.solutions().filter { !it.isSolved || !it.isValid() } .forEach { return false }
+                this.solutions().filter { !it.isSolved || !it.isValid() }.forEach { return false }
                 true
             } catch (e: Exception) {
                 //The triangle can't be made into a solution and is thus invalid
@@ -82,14 +81,14 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>) {
         }
         when (this.type) {
             SSS -> {
-                primary.angles[0] = acos((pow(primary.sides[1], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[0], 2.0)) / (2 * primary.sides[1] * primary.sides[2])) //Using the law of cosines
-                primary.angles[1] = acos((pow(primary.sides[0], 2.0) + pow(primary.sides[2], 2.0) - pow(primary.sides[1], 2.0)) / (2 * primary.sides[0] * primary.sides[2])) //Using the law of cosines
+                primary.angles[0] = acos((primary.sides[1].pow(2.0) + primary.sides[2].pow(2.0) - primary.sides[0].pow(2.0)) / (2 * primary.sides[1] * primary.sides[2])) //Using the law of cosines
+                primary.angles[1] = acos((primary.sides[0].pow(2.0) + primary.sides[2].pow(2.0) - primary.sides[1].pow(2.0)) / (2 * primary.sides[0] * primary.sides[2])) //Using the law of cosines
                 primary.angles[2] = PI - primary.angles[0] - primary.angles[1] //Because all angles must add up to π
             }
             SAS -> {
                 val unknownSideIndex = getIndicesSuchThat { !hasBeenInitialized(primary.sides[it]) }[0]
                 val unknownAngleIndices = getIndicesSuchThat { it != unknownSideIndex }
-                primary.sides[unknownSideIndex] = sqrt(pow(solved[0].sides[unknownAngleIndices[0]], 2.0) + pow(primary.sides[unknownAngleIndices[1]], 2.0) - 2 * primary.sides[unknownAngleIndices[0]] * primary.sides[unknownAngleIndices[1]] * cos(primary.angles[unknownSideIndex])) //Using the law of cosines
+                primary.sides[unknownSideIndex] = sqrt(solved[0].sides[unknownAngleIndices[0]].pow(2.0) + primary.sides[unknownAngleIndices[1]].pow(2.0) - 2 * primary.sides[unknownAngleIndices[0]] * primary.sides[unknownAngleIndices[1]] * cos(primary.angles[unknownSideIndex])) //Using the law of cosines
                 reSolve() //Will solve the triangle as if it were SSS
             }
             AAA -> {
