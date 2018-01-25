@@ -41,5 +41,6 @@ hs_err_pid*
 .idea/
 TriangleSolver.iml
 lib/
-\web/
+\web/production
+*.js
 *.iml
