@@ -1,5 +1,7 @@
-import java.lang.Math.*
-import java.util.*
+package com.saurabhtotey.trianglesolver
+
+import kotlin.js.Math.pow //This import is used instead of import kotlin.math.pow because that doesn't work
+import kotlin.math.*
 
 val hasBeenInitialized = { a: Double -> a > 0 } //A function that will return whether a triangle angle or side has been initialized
 /**
@@ -223,7 +225,6 @@ class TriangleType {
                 else -> Part.UNKNOWN
             }
         }.toTypedArray()
-        assert(this.type.size == 3)
     }
 
     /**
@@ -244,7 +245,7 @@ class TriangleType {
      * Accounts for palindromes
      */
     override fun equals(other: Any?): Boolean {
-        return other is TriangleType && (Arrays.equals(other.type, this.type) || Arrays.equals(other.type, this.type.reversedArray()))
+        return other is TriangleType && (other.type.contentEquals(this.type) || other.type.contentEquals(this.type.reversedArray()))
     }
 
 }
