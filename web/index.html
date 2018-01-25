@@ -6,13 +6,15 @@
     <link rel="icon" href="Icon.png">
 </head>
 <body>
-<canvas style="width:75%; float:left; background-color:white" id="screen"></canvas>
-<div style="width:25%; float:right; background-color:lightgray" id="ioPane">
-    <p>testarooni</p>
-</div>
-<div style="width:100%; float:bottom; background-color:gray; clear:both" id="anglesPane">
-    <p>testarooni 2</p>
-</div>
+    <div style="width:100%; display:table">
+        <canvas style="width:75%; display:table-cell; background-color:white" id="screen"></canvas>
+        <div style="width:25%; display:table-cell; background-color:lightgray" id="ioPane">
+            <p>testarooni</p>
+        </div>
+    </div>
+    <div style="width:100%; background-color:gray; margin-top:-20px; clear:both" id="anglesPane">
+        <p>testarooni 2</p>
+    </div>
 </body>
 <script src="production/Triangle-Solver/lib/kotlin.js"></script>
 <script src="production/Triangle-Solver/lib/kotlin.meta.js"></script>
