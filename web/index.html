@@ -7,12 +7,13 @@
 </head>
 <body>
     <div style="width:100%; display:table">
+        <!--TODO: canvas width is set in CSS which works, but makes drawings super blurry-->
         <canvas style="width:75%; display:table-cell; background-color:white" id="screen"></canvas>
-        <div style="width:25%; display:table-cell; background-color:lightgray" id="ioPane">
-            <p>testarooni</p>
+        <div style="width:25%; display:table-cell; background-color:lightgray; vertical-align:top" id="ioPane">
+            <h3 style="text-align:center">Triangle Type</h3>
         </div>
     </div>
-    <div style="width:100%; background-color:gray; margin-top:-20px; display:table; padding:5px 0 5px 0" id="anglesPane">
+    <div style="width:100%; background-color:gray; display:table; padding:5px 0 5px 0" id="anglesPane">
         <span style="display:table-cell; width:1%"></span>
         <p style="width:5%; display:table-cell">Angle Mode: </p>
         <select style="display:table-cell">
@@ -20,7 +21,7 @@
             <option value="Degrees">Degrees</option>
         </select>
         <span style="display:table-cell; width:30%"></span>
-        <input style="display:table-cell" type="text"/>
+        <input style="display:table-cell; width:10%" type="text"/><span>&#176; = </span><input style="display:table-cell; width:10%" type="text"/><span>rad</span>
     </div>
 </body>
 <script src="production/Triangle-Solver/lib/kotlin.js"></script>

@@ -11,5 +11,5 @@ val anglesPane = document.getElementById("anglesPane") as HTMLDivElement
 val renderer = screen.getContext("2d") as CanvasRenderingContext2D
 
 fun main(args: Array<String>) {
-    println("Hello World!")
+    renderer.strokeText("Hello World", screen.width / 2.0, screen.height / 2.0)
 }
