@@ -4,6 +4,8 @@ if (typeof kotlin === 'undefined') {
 this['Triangle-Solver'] = function (_, Kotlin) {
   'use strict';
   var throwCCE = Kotlin.throwCCE;
+  var ensureNotNull = Kotlin.ensureNotNull;
+  var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
   var math = Kotlin.kotlin.math;
   var sum = Kotlin.kotlin.collections.sum_pnorak$;
   var Exception = Kotlin.kotlin.Exception;
@@ -22,7 +24,20 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var ioPane;
   var anglesPane;
   var renderer;
+  function main$fitScreen() {
+    screen.width = roundToInt(ensureNotNull(screen.parentElement).clientWidth * 0.75);
+    screen.height = roundToInt(window.innerHeight * 0.5);
+  }
+  function main$lambda(closure$fitScreen) {
+    return function (it) {
+      closure$fitScreen();
+      return null;
+    };
+  }
   function main(args) {
+    var fitScreen = main$fitScreen;
+    window.onresize = main$lambda(fitScreen);
+    fitScreen();
     renderer.strokeText('Hello World', screen.width / 2.0, screen.height / 2.0);
   }
   function hasBeenInitialized$lambda(a) {
