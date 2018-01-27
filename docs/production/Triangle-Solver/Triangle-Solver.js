@@ -6,7 +6,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var throwCCE = Kotlin.throwCCE;
   var ensureNotNull = Kotlin.ensureNotNull;
   var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var math = Kotlin.kotlin.math;
   var sum = Kotlin.kotlin.collections.sum_pnorak$;
   var Exception = Kotlin.kotlin.Exception;
@@ -22,12 +21,10 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   TriangleType$Part.prototype = Object.create(Enum.prototype);
   TriangleType$Part.prototype.constructor = TriangleType$Part;
   var screen;
-  var ioPane;
-  var anglesPane;
   var renderer;
   function main$fitScreen() {
     screen.width = roundToInt(ensureNotNull(screen.parentElement).clientWidth * 0.75);
-    screen.height = roundToInt(window.innerHeight * 0.5);
+    screen.height = roundToInt(screen.width * 0.5);
   }
   function main$lambda(closure$fitScreen) {
     return function (it) {
@@ -35,11 +32,27 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return null;
     };
   }
+  function main$lambda_0(closure$degreesBox, closure$radiansBox) {
+    return function (it) {
+      closure$radiansBox.value = (180 * evaluateMath(closure$degreesBox.value) / math.PI).toString();
+      return null;
+    };
+  }
+  function main$lambda_1(closure$radiansBox, closure$degreesBox) {
+    return function (it) {
+      closure$degreesBox.value = (math.PI * evaluateMath(closure$radiansBox.value) / 180).toString();
+      return null;
+    };
+  }
   function main(args) {
+    var tmp$, tmp$_0;
     var fitScreen = main$fitScreen;
     window.onresize = main$lambda(fitScreen);
     fitScreen();
-    println(evaluateMath('sqrt(3^2 + 4^2)'));
+    var degreesBox = Kotlin.isType(tmp$ = document.getElementById('degreesBox'), HTMLInputElement) ? tmp$ : throwCCE();
+    var radiansBox = Kotlin.isType(tmp$_0 = document.getElementById('radiansBox'), HTMLInputElement) ? tmp$_0 : throwCCE();
+    degreesBox.oninput = main$lambda_0(degreesBox, radiansBox);
+    radiansBox.oninput = main$lambda_1(radiansBox, degreesBox);
   }
   function hasBeenInitialized$lambda(a) {
     return a > 0;
@@ -503,16 +516,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return screen;
     }
   });
-  Object.defineProperty(package$trianglesolver, 'ioPane', {
-    get: function () {
-      return ioPane;
-    }
-  });
-  Object.defineProperty(package$trianglesolver, 'anglesPane', {
-    get: function () {
-      return anglesPane;
-    }
-  });
   Object.defineProperty(package$trianglesolver, 'renderer', {
     get: function () {
       return renderer;
@@ -572,11 +575,9 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   package$trianglesolver.TriangleType_init_8efa2c$ = TriangleType_init;
   package$trianglesolver.TriangleType_init_61zpoe$ = TriangleType_init_0;
   package$trianglesolver.TriangleType = TriangleType;
-  var tmp$, tmp$_0, tmp$_1, tmp$_2;
+  var tmp$, tmp$_0;
   screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
-  ioPane = Kotlin.isType(tmp$_0 = document.getElementById('ioPane'), HTMLDivElement) ? tmp$_0 : throwCCE();
-  anglesPane = Kotlin.isType(tmp$_1 = document.getElementById('anglesPane'), HTMLDivElement) ? tmp$_1 : throwCCE();
-  renderer = Kotlin.isType(tmp$_2 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_2 : throwCCE();
+  renderer = Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
   hasBeenInitialized = hasBeenInitialized$lambda;
   SSS = TriangleType_init_0('SSS');
   SAS = TriangleType_init_0('SAS');
