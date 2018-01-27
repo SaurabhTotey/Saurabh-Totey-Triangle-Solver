@@ -21,11 +21,18 @@
             <option value="Degrees">Degrees</option>
         </select>
         <span style="display:table-cell; width:30%"></span>
-        <input style="display:table-cell; width:10%" type="text"/><span>&#176; = </span><input style="display:table-cell; width:10%" type="text"/><span>rad</span>
+        <input style="display:table-cell; width:10%" type="text" id="degreesBox"/><span>&#176; = </span><input style="display:table-cell; width:10%" type="text" id="radiansBox"/><span>rad</span>
     </div>
 </body>
-<script src="production/Triangle-Solver/lib/kotlin.js"></script>
-<script src="production/Triangle-Solver/lib/kotlin.meta.js"></script>
-<script src="production/Triangle-Solver/Triangle-Solver.js"></script>
-<script src="production/Triangle-Solver/Triangle-Solver.meta.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.20.1/math.js"></script>
+<script type="text/javascript">
+    //Really convoluted way of exposing math.eval as a function to Kotlin
+    function evaluateMath(expression) {
+        return math.eval(expression);
+    }
+</script>
+<script type="text/javascript" src="production/Triangle-Solver/lib/kotlin.js"></script>
+<script type="text/javascript" src="production/Triangle-Solver/lib/kotlin.meta.js"></script>
+<script type="text/javascript" src="production/Triangle-Solver/Triangle-Solver.js"></script>
+<script type="text/javascript" src="production/Triangle-Solver/Triangle-Solver.meta.js"></script>
 </html>

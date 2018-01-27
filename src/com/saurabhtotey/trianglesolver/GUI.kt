@@ -7,6 +7,9 @@ import org.w3c.dom.HTMLDivElement
 import kotlin.browser.window
 import kotlin.math.roundToInt
 
+@JsName("evaluateMath")
+external fun evaluate(expression: String): Double
+
 val screen = document.getElementById("screen") as HTMLCanvasElement
 val ioPane = document.getElementById("ioPane") as HTMLDivElement
 val anglesPane = document.getElementById("anglesPane") as HTMLDivElement
@@ -21,5 +24,4 @@ fun main(args: Array<String>) {
 
     window.onresize = { fitScreen(); null }
     fitScreen()
-    renderer.strokeText("Hello World", screen.width / 2.0, screen.height / 2.0)
 }

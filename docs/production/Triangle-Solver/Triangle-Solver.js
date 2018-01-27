@@ -6,6 +6,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var throwCCE = Kotlin.throwCCE;
   var ensureNotNull = Kotlin.ensureNotNull;
   var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
+  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var math = Kotlin.kotlin.math;
   var sum = Kotlin.kotlin.collections.sum_pnorak$;
   var Exception = Kotlin.kotlin.Exception;
@@ -38,7 +39,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     var fitScreen = main$fitScreen;
     window.onresize = main$lambda(fitScreen);
     fitScreen();
-    renderer.strokeText('Hello World', screen.width / 2.0, screen.height / 2.0);
+    println(evaluateMath('sqrt(3^2 + 4^2)'));
   }
   function hasBeenInitialized$lambda(a) {
     return a > 0;
