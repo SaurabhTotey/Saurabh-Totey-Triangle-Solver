@@ -1,4 +1,4 @@
-import com.fathzer.soft.javaluator.DoubleEvaluator  //http://javaluator.sourceforge.net/en/home/ is used: https://opensource.org/licenses/lgpl-3.0.html
+import com.fathzer.soft.javaluator.DoubleEvaluator //http://javaluator.sourceforge.net/en/home/ is used: https://opensource.org/licenses/lgpl-3.0.html
 import com.fathzer.soft.javaluator.Function
 
 val sqrt = Function("sqrt", 1)

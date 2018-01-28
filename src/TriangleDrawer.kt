@@ -86,7 +86,7 @@ class TriangleDrawer : JPanel() {
         val lineSpacing = 2 * triangleWidth / 35
         fun formatString(toFormat: Double): String {
             val numLength = toFormat.toString().length
-            val number: String = toFormat.toString().substring(0..if(numLength - 1 < truncateLength + 1) numLength - 1 else truncateLength + 1)
+            val number: String = toFormat.toString().substring(0..if (numLength - 1 < truncateLength + 1) numLength - 1 else truncateLength + 1)
             return when {
                 number.endsWith("0") && !number.endsWith(".0") -> formatString(number.substring(0 until number.length).toDouble())
                 number.length >= truncateLength + 1 -> {

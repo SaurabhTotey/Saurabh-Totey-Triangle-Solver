@@ -1,8 +1,7 @@
-import net.miginfocom.swing.MigLayout               //http://www.miglayout.com                   is used: https://opensource.org/licenses/lgpl-3.0.html
+import net.miginfocom.swing.MigLayout //http://www.miglayout.com is used: https://opensource.org/licenses/lgpl-3.0.html
 import java.awt.Color
 import java.awt.Font
 import java.awt.GraphicsEnvironment
-import java.awt.Image
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
 import java.awt.event.KeyEvent

@@ -45,7 +45,7 @@ class Triangle(var sides: Array<Double>, var angles: Array<Double>) {
         } else {
             return try {
                 //If any of the solutions aren't valid, the unsolved triangle isn't valid
-                this.solutions().filter { !it.isSolved || !it.isValid() } .forEach { return false }
+                this.solutions().filter { !it.isSolved || !it.isValid() }.forEach { return false }
                 true
             } catch (e: Exception) {
                 //The triangle can't be made into a solution and is thus invalid
