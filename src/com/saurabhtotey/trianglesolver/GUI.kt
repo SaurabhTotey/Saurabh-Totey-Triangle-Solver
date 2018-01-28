@@ -5,7 +5,6 @@ import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLInputElement
 import kotlin.browser.window
-import kotlin.math.PI
 import kotlin.math.roundToInt
 
 /**

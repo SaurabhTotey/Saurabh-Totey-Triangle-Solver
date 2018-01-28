@@ -11,17 +11,18 @@
         <canvas style="display:table-cell; background-color:white" id="screen"></canvas>
         <div style="width:25%; display:table-cell; background-color:lightgray; vertical-align:top" id="ioPane">
             <h3 style="text-align:center">Triangle Type</h3>
+            <input style="text-align:center; margin:auto; display:block;" type="text" id="triangleType"/>
         </div>
     </div>
     <div style="width:100%; background-color:gray; display:table; padding:5px 0 5px 0" id="anglesPane">
         <span style="display:table-cell; width:1%"></span>
         <p style="width:5%; display:table-cell">Angle Mode: </p>
         <select style="display:table-cell">
-            <option value="Radians">Radians</option>
-            <option value="Degrees">Degrees</option>
+            <option value="Radians">Radians (Rad)</option>
+            <option value="Degrees">Degrees (&#176;)</option>
         </select>
         <span style="display:table-cell; width:30%"></span>
-        <input style="display:table-cell; width:10%" type="text" id="degreesBox"/><span>&#176; = </span><input style="display:table-cell; width:10%" type="text" id="radiansBox"/><span>rad</span>
+        <input style="display:table-cell; width:10%" type="text" id="degreesBox"/><span>&#176; = </span><input style="display:table-cell; width:10%" type="text" id="radiansBox"/><span>Rad</span>
     </div>
 </body>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.20.1/math.js"></script>
