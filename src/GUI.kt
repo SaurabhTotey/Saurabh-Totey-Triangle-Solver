@@ -54,7 +54,7 @@ class MainWindow {
              * Makes the frame with the title and the icon
              */
             frame = JFrame("Saurabh Totey Triangle Solver")
-            frame.iconImage = ImageIO.read(File("res/Icon.png"))
+            frame.iconImage = ImageIO.read(this.javaClass.classLoader.getResource("Icon.png"))
             frame.layout = MigLayout()
             frame.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
             //Makes the frame bounds such that the frame is exactly in the middle of the screen filling half of its width/height
