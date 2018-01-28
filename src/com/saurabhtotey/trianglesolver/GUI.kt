@@ -35,6 +35,12 @@ fun main(args: Array<String>) {
     //Finds the degrees and radians conversion boxes and sets them to update the other box with the equivalent number
     val degreesBox = document.getElementById("degreesBox") as HTMLInputElement
     val radiansBox = document.getElementById("radiansBox") as HTMLInputElement
-    degreesBox.oninput = { radiansBox.value = (180 * evaluate(degreesBox.value) / PI).toString(); null }
-    radiansBox.oninput = { degreesBox.value = (PI * evaluate(radiansBox.value) / 180).toString(); null }
+    degreesBox.oninput = {
+        radiansBox.value = (evaluate("pi * ${degreesBox.value} / 180")).toString()
+        null
+    }
+    radiansBox.oninput = {
+        degreesBox.value = (evaluate("180 * ${radiansBox.value} / pi")).toString()
+        null
+    }
 }

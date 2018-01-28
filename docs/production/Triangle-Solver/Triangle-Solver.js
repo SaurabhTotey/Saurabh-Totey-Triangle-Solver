@@ -34,13 +34,13 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   }
   function main$lambda_0(closure$degreesBox, closure$radiansBox) {
     return function (it) {
-      closure$radiansBox.value = (180 * evaluateMath(closure$degreesBox.value) / math.PI).toString();
+      closure$radiansBox.value = evaluateMath('pi * ' + closure$degreesBox.value + ' / 180').toString();
       return null;
     };
   }
   function main$lambda_1(closure$radiansBox, closure$degreesBox) {
     return function (it) {
-      closure$degreesBox.value = (math.PI * evaluateMath(closure$radiansBox.value) / 180).toString();
+      closure$degreesBox.value = evaluateMath('180 * ' + closure$radiansBox.value + ' / pi').toString();
       return null;
     };
   }

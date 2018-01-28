@@ -28,7 +28,11 @@
 <script type="text/javascript">
     //Really convoluted way of exposing math.eval as a function to Kotlin
     function evaluateMath(expression) {
-        return math.eval(expression);
+        try {
+            return math.eval(expression);
+        } catch (e) {
+            return "";
+        }
     }
 </script>
 <script type="text/javascript" src="production/Triangle-Solver/lib/kotlin.js"></script>
