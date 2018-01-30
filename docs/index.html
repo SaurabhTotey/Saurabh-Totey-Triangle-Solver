@@ -7,11 +7,29 @@
 </head>
 <body>
     <div style="width:100%; display:table">
-        <!--TODO: canvas width is set in CSS which works, but makes drawings super blurry-->
         <canvas style="display:table-cell; background-color:white" id="screen"></canvas>
         <div style="width:25%; display:table-cell; background-color:lightgray; vertical-align:top" id="ioPane">
-            <h3 style="text-align:center">Triangle Type</h3>
+            <h3 style="text-align:center">Triangle Information</h3>
+            <h5 style="text-align:center">Triangle Type</h5>
             <input style="text-align:center; margin:auto; display:block;" type="text" id="triangleType"/>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <div style="width:100%">
+                <span style="margin:auto; display:block; text-align:center">
+                    <input style="text-align:center" type="text" id="input1"/>
+                    <select>
+                    </select>
+                </span>
+                <span style="margin:auto; display:block; text-align:center">
+                    <input style="text-align:center" type="text" id="input2"/>
+                    <select>
+                    </select>
+                </span>
+                <span style="margin:auto; display:block; text-align:center">
+                    <input style="text-align:center" type="text" id="input3"/>
+                    <select>
+                    </select>
+                </span>
+            </div>
         </div>
     </div>
     <div style="width:100%; background-color:gray; display:table; padding:5px 0 5px 0" id="anglesPane">

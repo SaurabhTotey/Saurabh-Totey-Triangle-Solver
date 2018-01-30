@@ -20,11 +20,11 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var unboxChar = Kotlin.unboxChar;
   TriangleType$Part.prototype = Object.create(Enum.prototype);
   TriangleType$Part.prototype.constructor = TriangleType$Part;
-  var screen;
-  var renderer;
-  function main$fitScreen() {
-    screen.width = roundToInt(ensureNotNull(screen.parentElement).clientWidth * 0.75);
-    screen.height = roundToInt(screen.width * 0.5);
+  function main$fitScreen(closure$screen) {
+    return function () {
+      closure$screen.width = roundToInt(ensureNotNull(closure$screen.parentElement).clientWidth * 0.75);
+      closure$screen.height = roundToInt(closure$screen.width * 0.5);
+    };
   }
   function main$lambda(closure$fitScreen) {
     return function (it) {
@@ -45,12 +45,14 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     };
   }
   function main(args) {
-    var tmp$, tmp$_0;
-    var fitScreen = main$fitScreen;
+    var tmp$, tmp$_0, tmp$_1, tmp$_2;
+    var screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
+    var renderer = Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
+    var fitScreen = main$fitScreen(screen);
     window.onresize = main$lambda(fitScreen);
     fitScreen();
-    var degreesBox = Kotlin.isType(tmp$ = document.getElementById('degreesBox'), HTMLInputElement) ? tmp$ : throwCCE();
-    var radiansBox = Kotlin.isType(tmp$_0 = document.getElementById('radiansBox'), HTMLInputElement) ? tmp$_0 : throwCCE();
+    var degreesBox = Kotlin.isType(tmp$_1 = document.getElementById('degreesBox'), HTMLInputElement) ? tmp$_1 : throwCCE();
+    var radiansBox = Kotlin.isType(tmp$_2 = document.getElementById('radiansBox'), HTMLInputElement) ? tmp$_2 : throwCCE();
     degreesBox.oninput = main$lambda_0(degreesBox, radiansBox);
     radiansBox.oninput = main$lambda_1(radiansBox, degreesBox);
   }
@@ -511,16 +513,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var package$com = _.com || (_.com = {});
   var package$saurabhtotey = package$com.saurabhtotey || (package$com.saurabhtotey = {});
   var package$trianglesolver = package$saurabhtotey.trianglesolver || (package$saurabhtotey.trianglesolver = {});
-  Object.defineProperty(package$trianglesolver, 'screen', {
-    get: function () {
-      return screen;
-    }
-  });
-  Object.defineProperty(package$trianglesolver, 'renderer', {
-    get: function () {
-      return renderer;
-    }
-  });
   package$trianglesolver.main_kand9s$ = main;
   Object.defineProperty(package$trianglesolver, 'hasBeenInitialized', {
     get: function () {
@@ -575,9 +567,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   package$trianglesolver.TriangleType_init_8efa2c$ = TriangleType_init;
   package$trianglesolver.TriangleType_init_61zpoe$ = TriangleType_init_0;
   package$trianglesolver.TriangleType = TriangleType;
-  var tmp$, tmp$_0;
-  screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
-  renderer = Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
   hasBeenInitialized = hasBeenInitialized$lambda;
   SSS = TriangleType_init_0('SSS');
   SAS = TriangleType_init_0('SAS');
