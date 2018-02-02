@@ -6,6 +6,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var throwCCE = Kotlin.throwCCE;
   var ensureNotNull = Kotlin.ensureNotNull;
   var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
+  var asList = Kotlin.org.w3c.dom.asList_kt9thq$;
   var math = Kotlin.kotlin.math;
   var sum = Kotlin.kotlin.collections.sum_pnorak$;
   var Exception = Kotlin.kotlin.Exception;
@@ -44,6 +45,8 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return null;
     };
   }
+  var collectionSizeOrDefault = Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$;
+  var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
   function main(args) {
     var tmp$, tmp$_0, tmp$_1, tmp$_2;
     var screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
@@ -55,12 +58,37 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     var radiansBox = Kotlin.isType(tmp$_2 = document.getElementById('radiansBox'), HTMLInputElement) ? tmp$_2 : throwCCE();
     degreesBox.oninput = main$lambda_0(degreesBox, radiansBox);
     radiansBox.oninput = main$lambda_1(radiansBox, degreesBox);
+    var $receiver = asList(document.getElementsByClassName('componentSelect'));
+    var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
+    var tmp$_3;
+    tmp$_3 = $receiver.iterator();
+    while (tmp$_3.hasNext()) {
+      var item = tmp$_3.next();
+      var tmp$_4;
+      destination.add_11rb$(Kotlin.isType(tmp$_4 = item, HTMLSelectElement) ? tmp$_4 : throwCCE());
+    }
+    var tmp$_5, tmp$_0_0;
+    var index = 0;
+    tmp$_5 = destination.iterator();
+    while (tmp$_5.hasNext()) {
+      var item_0 = tmp$_5.next();
+      var index_0 = (tmp$_0_0 = index, index = tmp$_0_0 + 1 | 0, tmp$_0_0);
+      var tmp$_6, tmp$_7, tmp$_8;
+      tmp$_6 = ['a', 'b', 'c', 'A', 'B', 'C'];
+      for (tmp$_7 = 0; tmp$_7 !== tmp$_6.length; ++tmp$_7) {
+        var letter = tmp$_6[tmp$_7];
+        var option = Kotlin.isType(tmp$_8 = document.createElement('OPTION'), HTMLOptionElement) ? tmp$_8 : throwCCE();
+        option.value = letter;
+        option.text = letter;
+        item_0.add(option);
+      }
+      item_0.selectedIndex = index_0;
+    }
   }
   function hasBeenInitialized$lambda(a) {
     return a > 0;
   }
   var hasBeenInitialized;
-  var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
   function getIndicesSuchThat(predicate) {
     var $receiver = [0, 1, 2];
     var destination = ArrayList_init();

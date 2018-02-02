@@ -1,9 +1,7 @@
 package com.saurabhtotey.trianglesolver
 
+import org.w3c.dom.*
 import kotlin.browser.document
-import org.w3c.dom.HTMLCanvasElement
-import org.w3c.dom.CanvasRenderingContext2D
-import org.w3c.dom.HTMLInputElement
 import kotlin.browser.window
 import kotlin.math.roundToInt
 
@@ -43,4 +41,15 @@ fun main(args: Array<String>) {
         degreesBox.value = (evaluate("180 * ${radiansBox.value} / pi")).toString()
         null
     }
+    //Gives the componentSelect dropdowns all of the options
+    document.getElementsByClassName("componentSelect").asList().map { it as HTMLSelectElement }
+            .forEachIndexed { index, element ->
+                for (letter in arrayOf("a", "b", "c", "A", "B", "C")) {
+                    val option = document.createElement("OPTION") as HTMLOptionElement
+                    option.value = letter
+                    option.text = letter
+                    element.add(option)
+                }
+                element.selectedIndex = index
+            }
 }
