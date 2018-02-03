@@ -67,17 +67,15 @@ fun main(args: Array<String>) {
     }
     typeIO.value = "SSS"
     typeIO.oninput = {
-        //TODO: below logic can definitely be shortened somehow
         //Formats any inputs to this box correctly
-        val lastChar = typeIO.value[typeIO.value.length - 1]
-        fun shorten() {
-            typeIO.value = typeIO.value.substring(0 until typeIO.value.length - 1)
+        if (typeIO.value.length > 3) {
+            typeIO.value = typeIO.value.substring(0..2)
         }
-        if (typeIO.value.length > 3 || !"AS".contains(lastChar.toUpperCase())) {
-            shorten()
-        } else if (!"AS".contains(lastChar)) {
-            shorten()
-            typeIO.value = typeIO.value + lastChar.toUpperCase()
+        typeIO.value = typeIO.value.toUpperCase()
+        for (letter in typeIO.value) {
+            if (!"AS".contains(letter)) {
+                typeIO.value = typeIO.value.replace(letter.toString(), "")
+            }
         }
         //Changes the componentSelect dropdown boxes to match the typeIO box
         if (typeIO.value.length == 3) {
