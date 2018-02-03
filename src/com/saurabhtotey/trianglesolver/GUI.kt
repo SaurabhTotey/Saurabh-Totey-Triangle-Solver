@@ -41,15 +41,58 @@ fun main(args: Array<String>) {
         degreesBox.value = (evaluate("180 * ${radiansBox.value} / pi")).toString()
         null
     }
-    //Gives the componentSelect dropdowns all of the options
-    document.getElementsByClassName("componentSelect").asList().map { it as HTMLSelectElement }
-            .forEachIndexed { index, element ->
-                for (letter in arrayOf("a", "b", "c", "A", "B", "C")) {
-                    val option = document.createElement("OPTION") as HTMLOptionElement
-                    option.value = letter
-                    option.text = letter
-                    element.add(option)
-                }
-                element.selectedIndex = index
+    //Gives the componentSelect dropdowns all of the options and sets the dropdowns and typeIO box to always correspond
+    val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
+    val typeIO = document.getElementById("triangleType") as HTMLInputElement
+    val componentDropdowns = document.getElementsByClassName("componentSelect").asList().map { it as HTMLSelectElement }
+    componentDropdowns.forEachIndexed { index, element ->
+        //Gives each box all of the triangle component options
+        for (letter in stringParts) {
+            val option = document.createElement("OPTION") as HTMLOptionElement
+            option.value = letter
+            option.text = letter
+            element.add(option)
+        }
+        //Gives the boxes a unique starting index (0, 1, 2) to start as ("a", "b", "c")
+        element.selectedIndex = index
+        //Adds an input listener to the boxes that changes the typeIO box to match the type of the selected options
+        element.oninput = {
+            val partsArray = Array(6, { _ -> -1.0 }) //Indexes 0..2 are sides, indexes 3..5 are angles
+            for (dropdown in componentDropdowns) {
+                partsArray[dropdown.selectedIndex] = 1.0
             }
+            typeIO.value = TriangleType(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5)).toString()
+            null
+        }
+    }
+    typeIO.value = "SSS"
+    typeIO.oninput = {
+        //TODO: below logic can definitely be shortened somehow
+        //Formats any inputs to this box correctly
+        val lastChar = typeIO.value[typeIO.value.length - 1]
+        fun shorten() {
+            typeIO.value = typeIO.value.substring(0 until typeIO.value.length - 1)
+        }
+        if (typeIO.value.length > 3 || !"AS".contains(lastChar.toUpperCase())) {
+            shorten()
+        } else if (!"AS".contains(lastChar)) {
+            shorten()
+            typeIO.value = typeIO.value + lastChar.toUpperCase()
+        }
+        //Changes the componentSelect dropdown boxes to match the typeIO box
+        if (typeIO.value.length == 3) {
+            if (typeIO.value[1] != typeIO.value[0] && typeIO.value[0] == typeIO.value[2]) { //If the middle char is unique
+                for (i in 0..2) {
+                    componentDropdowns[i].selectedIndex = i + if (typeIO.value[i] == 'A') 3 else 0
+                }
+            } else {
+                var sideIndex = 0
+                var angleIndex = 3
+                for (i in 0..2) {
+                    componentDropdowns[i].selectedIndex = if (typeIO.value[i] == 'S') sideIndex++ else angleIndex++
+                }
+            }
+        }
+        null
+    }
 }

@@ -7,6 +7,12 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var ensureNotNull = Kotlin.ensureNotNull;
   var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
   var asList = Kotlin.org.w3c.dom.asList_kt9thq$;
+  var IntRange = Kotlin.kotlin.ranges.IntRange;
+  var sliceArray = Kotlin.kotlin.collections.sliceArray_8r7b3e$;
+  var until = Kotlin.kotlin.ranges.until_dqglrj$;
+  var substring = Kotlin.kotlin.text.substring_fc3b62$;
+  var contains = Kotlin.kotlin.text.contains_sgbm27$;
+  var toBoxedChar = Kotlin.toBoxedChar;
   var math = Kotlin.kotlin.math;
   var sum = Kotlin.kotlin.collections.sum_pnorak$;
   var Exception = Kotlin.kotlin.Exception;
@@ -45,10 +51,68 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return null;
     };
   }
+  var Array_0 = Array;
+  function main$lambda$lambda(closure$componentDropdowns, closure$typeIO) {
+    return function (it) {
+      var tmp$;
+      var array = Array_0(6);
+      var tmp$_0;
+      tmp$_0 = array.length - 1 | 0;
+      for (var i = 0; i <= tmp$_0; i++) {
+        array[i] = -1.0;
+      }
+      var partsArray = array;
+      tmp$ = closure$componentDropdowns.iterator();
+      while (tmp$.hasNext()) {
+        var dropdown = tmp$.next();
+        partsArray[dropdown.selectedIndex] = 1.0;
+      }
+      closure$typeIO.value = TriangleType_init(sliceArray(partsArray, new IntRange(0, 2)), sliceArray(partsArray, new IntRange(3, 5))).toString();
+      return null;
+    };
+  }
+  function main$lambda$shorten(closure$typeIO) {
+    return function () {
+      closure$typeIO.value = substring(closure$typeIO.value, until(0, closure$typeIO.value.length - 1 | 0));
+    };
+  }
+  function main$lambda_2(closure$typeIO, closure$componentDropdowns) {
+    return function (it) {
+      var tmp$, tmp$_0;
+      var lastChar = closure$typeIO.value.charCodeAt(closure$typeIO.value.length - 1 | 0);
+      var shorten = main$lambda$shorten(closure$typeIO);
+      var tmp$_1 = closure$typeIO.value.length > 3;
+      if (!tmp$_1) {
+        tmp$_1 = !contains('AS', unboxChar(String.fromCharCode(lastChar).toUpperCase().charCodeAt(0)));
+      }
+      if (tmp$_1) {
+        shorten();
+      }
+       else if (!contains('AS', lastChar)) {
+        shorten();
+        closure$typeIO.value = closure$typeIO.value + String.fromCharCode(toBoxedChar(unboxChar(String.fromCharCode(lastChar).toUpperCase().charCodeAt(0))));
+      }
+      if (closure$typeIO.value.length === 3) {
+        if (closure$typeIO.value.charCodeAt(1) !== closure$typeIO.value.charCodeAt(0) && closure$typeIO.value.charCodeAt(0) === closure$typeIO.value.charCodeAt(2)) {
+          for (var i = 0; i <= 2; i++) {
+            closure$componentDropdowns.get_za3lpa$(i).selectedIndex = i + (closure$typeIO.value.charCodeAt(i) === 65 ? 3 : 0) | 0;
+          }
+        }
+         else {
+          var sideIndex = 0;
+          var angleIndex = 3;
+          for (var i_0 = 0; i_0 <= 2; i_0++) {
+            closure$componentDropdowns.get_za3lpa$(i_0).selectedIndex = closure$typeIO.value.charCodeAt(i_0) === 83 ? (tmp$ = sideIndex, sideIndex = tmp$ + 1 | 0, tmp$) : (tmp$_0 = angleIndex, angleIndex = tmp$_0 + 1 | 0, tmp$_0);
+          }
+        }
+      }
+      return null;
+    };
+  }
   var collectionSizeOrDefault = Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$;
   var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
   function main(args) {
-    var tmp$, tmp$_0, tmp$_1, tmp$_2;
+    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3;
     var screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
     var renderer = Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
     var fitScreen = main$fitScreen(screen);
@@ -58,32 +122,37 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     var radiansBox = Kotlin.isType(tmp$_2 = document.getElementById('radiansBox'), HTMLInputElement) ? tmp$_2 : throwCCE();
     degreesBox.oninput = main$lambda_0(degreesBox, radiansBox);
     radiansBox.oninput = main$lambda_1(radiansBox, degreesBox);
+    var stringParts = ['a', 'b', 'c', 'A', 'B', 'C'];
+    var typeIO = Kotlin.isType(tmp$_3 = document.getElementById('triangleType'), HTMLInputElement) ? tmp$_3 : throwCCE();
     var $receiver = asList(document.getElementsByClassName('componentSelect'));
     var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
-    var tmp$_3;
-    tmp$_3 = $receiver.iterator();
-    while (tmp$_3.hasNext()) {
-      var item = tmp$_3.next();
-      var tmp$_4;
-      destination.add_11rb$(Kotlin.isType(tmp$_4 = item, HTMLSelectElement) ? tmp$_4 : throwCCE());
+    var tmp$_4;
+    tmp$_4 = $receiver.iterator();
+    while (tmp$_4.hasNext()) {
+      var item = tmp$_4.next();
+      var tmp$_5;
+      destination.add_11rb$(Kotlin.isType(tmp$_5 = item, HTMLSelectElement) ? tmp$_5 : throwCCE());
     }
-    var tmp$_5, tmp$_0_0;
+    var componentDropdowns = destination;
+    var tmp$_6, tmp$_0_0;
     var index = 0;
-    tmp$_5 = destination.iterator();
-    while (tmp$_5.hasNext()) {
-      var item_0 = tmp$_5.next();
+    tmp$_6 = componentDropdowns.iterator();
+    while (tmp$_6.hasNext()) {
+      var item_0 = tmp$_6.next();
       var index_0 = (tmp$_0_0 = index, index = tmp$_0_0 + 1 | 0, tmp$_0_0);
-      var tmp$_6, tmp$_7, tmp$_8;
-      tmp$_6 = ['a', 'b', 'c', 'A', 'B', 'C'];
-      for (tmp$_7 = 0; tmp$_7 !== tmp$_6.length; ++tmp$_7) {
-        var letter = tmp$_6[tmp$_7];
+      var tmp$_7, tmp$_8;
+      for (tmp$_7 = 0; tmp$_7 !== stringParts.length; ++tmp$_7) {
+        var letter = stringParts[tmp$_7];
         var option = Kotlin.isType(tmp$_8 = document.createElement('OPTION'), HTMLOptionElement) ? tmp$_8 : throwCCE();
         option.value = letter;
         option.text = letter;
         item_0.add(option);
       }
       item_0.selectedIndex = index_0;
+      item_0.oninput = main$lambda$lambda(componentDropdowns, typeIO);
     }
+    typeIO.value = 'SSS';
+    typeIO.oninput = main$lambda_2(typeIO, componentDropdowns);
   }
   function hasBeenInitialized$lambda(a) {
     return a > 0;
@@ -350,7 +419,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     simpleName: 'Triangle',
     interfaces: []
   };
-  var Array_0 = Array;
   function Triangle_init($this) {
     $this = $this || Object.create(Triangle.prototype);
     var array = Array_0(3);
@@ -506,7 +574,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     };
   }
   var iterator = Kotlin.kotlin.text.iterator_gw00vp$;
-  var toBoxedChar = Kotlin.toBoxedChar;
   var copyToArray = Kotlin.kotlin.collections.copyToArray;
   function TriangleType_init_0(stringType, $this) {
     $this = $this || Object.create(TriangleType.prototype);
