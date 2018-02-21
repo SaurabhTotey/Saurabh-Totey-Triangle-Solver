@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     ///The actual rendering area to draw the triangles; is an HTML canvas
     val screen = document.getElementById("screen") as HTMLCanvasElement
     ///The utility object which draws to the screen
-    val renderer = screen.getContext("2d") as CanvasRenderingContext2D
+    val renderer = screen.getContext("2d") as CanvasRenderingContext2D //TODO: do triangle drawing in separate file
     /**
      * Defines a method to fit the rendering area to the available screen space
      */
@@ -41,10 +41,38 @@ fun main(args: Array<String>) {
         degreesBox.value = (evaluate("180 * ${radiansBox.value} / pi")).toString()
         null
     }
-    //Gives the componentSelect dropdowns all of the options and sets the dropdowns and typeIO box to always correspond
+    //Initializes all triangle part labels and gets the typeIO and component dropdown HTML elements that will correspond
     val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
     val typeIO = document.getElementById("triangleType") as HTMLInputElement
     val componentDropdowns = document.getElementsByClassName("componentSelect").asList().map { it as HTMLSelectElement }
+    //Makes the input boxes where the user enters their triangle data
+    val inputBoxes = (0..2).map { document.getElementById("input$it") as HTMLInputElement }.toTypedArray()
+    //Defines a function that reads all input data and attempts to make/draw the triangles based on it
+    fun updateTriangles() {
+        val inputted = try {
+            //Reads triangle info
+            val partsArray = Array(6, { _ -> -1.0 }) //Indexes 0..2 are sides, indexes 3..5 are angles
+            for (i in 0..2) {
+                partsArray[componentDropdowns[i].selectedIndex] = evaluate(inputBoxes[i].value)
+            }
+            //Updates angles to be in radians if they were inputted as degrees
+            if ((document.getElementById("angleMode") as HTMLSelectElement).value == "Degrees") {
+                for (i in 3..5) {
+                    partsArray[i] = asRadians(partsArray[i])
+                }
+            }
+            Triangle(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5))
+        } catch (e: Exception) {
+            Triangle()
+        }
+        //TODO: get inputted solutions and then draw
+        println("sides: ${inputted.sides}; angles: ${inputted.angles}")
+    }
+    //Sets the data input boxes to update triangles whenever changed
+    inputBoxes.forEach {
+        it.oninput = { updateTriangles() }
+    }
+    //Initializes component dropdowns to start at a, b, and c and correspond to the typeIO box
     componentDropdowns.forEachIndexed { index, element ->
         //Gives each box all of the triangle component options
         for (letter in stringParts) {
@@ -62,9 +90,11 @@ fun main(args: Array<String>) {
                 partsArray[dropdown.selectedIndex] = 1.0
             }
             typeIO.value = TriangleType(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5)).toString()
+            updateTriangles()
             null
         }
     }
+    //Sets the typeIO box to initially show SSS and then always correspond with the componentSelect dropdowns
     typeIO.value = "SSS"
     typeIO.oninput = {
         //Formats any inputs to this box correctly
@@ -90,6 +120,7 @@ fun main(args: Array<String>) {
                     componentDropdowns[i].selectedIndex = if (typeIO.value[i] == 'S') sideIndex++ else angleIndex++
                 }
             }
+            updateTriangles()
         }
         null
     }

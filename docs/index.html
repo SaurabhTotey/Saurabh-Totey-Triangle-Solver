@@ -15,6 +15,11 @@
             <br/><br/><br/><br/><br/><br/><br/><br/><br/>
             <div style="width:100%">
                 <span style="margin:auto; display:block; text-align:center">
+                    <input style="text-align:center" type="text" id="input0"/>
+                    <select class="componentSelect">
+                    </select>
+                </span>
+                <span style="margin:auto; display:block; text-align:center">
                     <input style="text-align:center" type="text" id="input1"/>
                     <select class="componentSelect">
                     </select>
@@ -24,18 +29,13 @@
                     <select class="componentSelect">
                     </select>
                 </span>
-                <span style="margin:auto; display:block; text-align:center">
-                    <input style="text-align:center" type="text" id="input3"/>
-                    <select class="componentSelect">
-                    </select>
-                </span>
             </div>
         </div>
     </div>
     <div style="width:100%; background-color:gray; display:table; padding:5px 0 5px 0" id="anglesPane">
         <span style="display:table-cell; width:1%"></span>
         <p style="width:5%; display:table-cell">Angle Mode: </p>
-        <select style="display:table-cell">
+        <select style="display:table-cell" id="angleMode">
             <option value="Radians">Radians (Rad)</option>
             <option value="Degrees">Degrees (&#176;)</option>
         </select>
