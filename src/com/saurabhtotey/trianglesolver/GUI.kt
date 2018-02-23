@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     ///The actual rendering area to draw the triangles; is an HTML canvas
     val screen = document.getElementById("screen") as HTMLCanvasElement
     ///The utility object which draws to the screen
-    val renderer = screen.getContext("2d") as CanvasRenderingContext2D //TODO: do triangle drawing in separate file
+    val drawer = TriangleDrawer(screen.getContext("2d") as CanvasRenderingContext2D) //TODO: do triangle drawing in separate file
     /**
      * Defines a method to fit the rendering area to the available screen space
      */
@@ -47,9 +47,9 @@ fun main(args: Array<String>) {
     val componentDropdowns = document.getElementsByClassName("componentSelect").asList().map { it as HTMLSelectElement }
     //Makes the input boxes where the user enters their triangle data
     val inputBoxes = (0..2).map { document.getElementById("input$it") as HTMLInputElement }.toTypedArray()
-    //Defines a function that reads all input data and attempts to make/draw the triangles based on it
+    //Defines a function that reads all input data and gives it to the triangle drawer
     fun updateTriangles() {
-        val inputted = try {
+        drawer.triangle = try {
             //Reads triangle info
             val partsArray = Array(6, { _ -> -1.0 }) //Indexes 0..2 are sides, indexes 3..5 are angles
             for (i in 0..2) {
@@ -65,8 +65,6 @@ fun main(args: Array<String>) {
         } catch (e: Exception) {
             Triangle()
         }
-        //TODO: get inputted solutions and then draw
-        println("sides: ${inputted.sides}; angles: ${inputted.angles}")
     }
     //Sets the data input boxes to update triangles whenever changed
     inputBoxes.forEach {

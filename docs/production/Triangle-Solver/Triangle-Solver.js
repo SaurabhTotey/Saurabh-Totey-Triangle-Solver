@@ -11,7 +11,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var equals = Kotlin.equals;
   var sliceArray = Kotlin.kotlin.collections.sliceArray_8r7b3e$;
   var Exception = Kotlin.kotlin.Exception;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var Unit = Kotlin.kotlin.Unit;
   var substring = Kotlin.kotlin.text.substring_fc3b62$;
   var iterator = Kotlin.kotlin.text.iterator_gw00vp$;
@@ -54,14 +53,15 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     };
   }
   var Array_0 = Array;
-  function main$updateTriangles(closure$inputBoxes, closure$componentDropdowns) {
+  function main$updateTriangles(closure$inputBoxes, closure$componentDropdowns, closure$drawer) {
     return function () {
-      var tmp$, tmp$_0;
+      var tmp$, tmp$_0, tmp$_1;
+      tmp$_1 = closure$drawer;
       try {
         var array = Array_0(6);
-        var tmp$_1;
-        tmp$_1 = array.length - 1 | 0;
-        for (var i = 0; i <= tmp$_1; i++) {
+        var tmp$_2;
+        tmp$_2 = array.length - 1 | 0;
+        for (var i = 0; i <= tmp$_2; i++) {
           array[i] = -1.0;
         }
         var partsArray = array;
@@ -82,8 +82,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
          else
           throw e;
       }
-      var inputted = tmp$_0;
-      println('sides: ' + inputted.sides + '; angles: ' + inputted.angles);
+      tmp$_1.triangle = tmp$_0;
     };
   }
   function main$lambda$lambda(closure$updateTriangles) {
@@ -150,7 +149,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   function main(args) {
     var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3;
     var screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
-    var renderer = Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE();
+    var drawer = new TriangleDrawer(Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE());
     var fitScreen = main$fitScreen(screen);
     window.onresize = main$lambda(fitScreen);
     fitScreen();
@@ -180,7 +179,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       destination_0.add_11rb$(Kotlin.isType(tmp$_7 = document.getElementById('input' + item_0), HTMLInputElement) ? tmp$_7 : throwCCE());
     }
     var inputBoxes = copyToArray(destination_0);
-    var updateTriangles = main$updateTriangles(inputBoxes, componentDropdowns);
+    var updateTriangles = main$updateTriangles(inputBoxes, componentDropdowns, drawer);
     var tmp$_8;
     for (tmp$_8 = 0; tmp$_8 !== inputBoxes.length; ++tmp$_8) {
       var element = inputBoxes[tmp$_8];
@@ -656,6 +655,30 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     $this.type = copyToArray(destination);
     return $this;
   }
+  function TriangleDrawer(renderer) {
+    this.renderer = renderer;
+    this.triangle_s3dj5s$_0 = null;
+    this.renderer.save();
+  }
+  Object.defineProperty(TriangleDrawer.prototype, 'triangle', {
+    get: function () {
+      return this.triangle_s3dj5s$_0;
+    },
+    set: function (value) {
+      ensureNotNull(value);
+      this.renderer.restore();
+      this.triangle_s3dj5s$_0 = value;
+      this.drawSolutions_0();
+    }
+  });
+  TriangleDrawer.prototype.drawSolutions_0 = function () {
+    var solutions = ensureNotNull(this.triangle).solutions();
+  };
+  TriangleDrawer.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'TriangleDrawer',
+    interfaces: []
+  };
   var package$com = _.com || (_.com = {});
   var package$saurabhtotey = package$com.saurabhtotey || (package$com.saurabhtotey = {});
   var package$trianglesolver = package$saurabhtotey.trianglesolver || (package$saurabhtotey.trianglesolver = {});
@@ -713,6 +736,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   package$trianglesolver.TriangleType_init_8efa2c$ = TriangleType_init;
   package$trianglesolver.TriangleType_init_61zpoe$ = TriangleType_init_0;
   package$trianglesolver.TriangleType = TriangleType;
+  package$trianglesolver.TriangleDrawer = TriangleDrawer;
   hasBeenInitialized = hasBeenInitialized$lambda;
   SSS = TriangleType_init_0('SSS');
   SAS = TriangleType_init_0('SAS');
