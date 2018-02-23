@@ -13,10 +13,14 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
     var triangle: Triangle? = null
         //When a triangle is given to this to draw, it restores a blank screen and then draws the triangle
         set(value) {
-            value!!
             this.renderer.restore()
             field = value
-            this.drawSolutions()
+            try {
+                this.drawSolutions()
+            } catch (e: Exception) {
+                this.renderer.restore()
+                field = null
+            }
         }
 
     /**
@@ -32,7 +36,15 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
      */
     private fun drawSolutions() {
         val solutions = this.triangle!!.solutions()
-        //TODO: draw triangles and do what this method says it will do
+        fun drawTriangle(toDraw: Triangle, x: Int, y: Int, w: Int, h: Int) {
+            //TODO: use renderer to draw given rectangle within given rectangle
+        }
+        if (solutions.size == 2) {
+            drawTriangle(solutions[0], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop, this.renderer.canvas.width, this.renderer.canvas.height / 2)
+            drawTriangle(solutions[1], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop + this.renderer.canvas.height / 2, this.renderer.canvas.width, this.renderer.canvas.height / 2)
+        } else {
+            drawTriangle(solutions[0], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop, this.renderer.canvas.width, this.renderer.canvas.height)
+        }
     }
 
 }
