@@ -90,7 +90,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       }
        catch (e) {
         if (Kotlin.isType(e, Exception)) {
-          tmp$_0 = Triangle_init();
+          tmp$_0 = null;
         }
          else
           throw e;
@@ -792,10 +792,10 @@ this['Triangle-Solver'] = function (_, Kotlin) {
          else {
           tmp$ = formatString(asDegrees(triangleToRepresent.angles[i_0]));
         }
-        tmp$_1.strokeText(tmp$_0 + tmp$, lineSpacing / 2.0, (i_0 + 1.0) * lineSpacing);
+        tmp$_1.strokeText(tmp$_0 + tmp$, x + lineSpacing / 2.0, y + (i_0 + 1.0) * lineSpacing);
       }
       this$TriangleDrawer.renderer.strokeStyle = '#000000';
-      this$TriangleDrawer.renderer.strokeText(repeat(' ', (19 - 12 | 0) / 2 | 0) + 'Area = ' + formatString(triangleToRepresent.area()), lineSpacing / 2.0, 4.0 * lineSpacing);
+      this$TriangleDrawer.renderer.strokeText(repeat(' ', (19 - 12 | 0) / 2 | 0) + 'Area = ' + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing);
     };
   }
   TriangleDrawer.prototype.drawSolutions_0 = function () {

@@ -1,7 +1,6 @@
 package com.saurabhtotey.trianglesolver
 
 import org.w3c.dom.CanvasRenderingContext2D
-import org.w3c.dom.Path2D
 import kotlin.math.*
 
 /**
@@ -121,10 +120,10 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
                     formatString(triangleToRepresent.angles[i])
                 } else {
                     formatString(asDegrees(triangleToRepresent.angles[i]))
-                }, lineSpacing / 2.0, (i + 1.0) * lineSpacing)
+                }, x + lineSpacing / 2.0, y + (i + 1.0) * lineSpacing)
             }
             this.renderer.strokeStyle = "#000000"
-            this.renderer.strokeText(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent.area()), lineSpacing / 2.0, 4.0 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces
+            this.renderer.strokeText(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces
         }
         if (solutions.size == 2) {
             drawTriangle(solutions[0], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop, this.renderer.canvas.width, this.renderer.canvas.height / 2)

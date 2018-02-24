@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     ///The actual rendering area to draw the triangles; is an HTML canvas
     val screen = document.getElementById("screen") as HTMLCanvasElement
     ///The utility object which draws to the screen
-    val drawer = TriangleDrawer(screen.getContext("2d") as CanvasRenderingContext2D) //TODO: do triangle drawing in separate file
+    val drawer = TriangleDrawer(screen.getContext("2d") as CanvasRenderingContext2D)
     /**
      * Defines a method to fit the rendering area to the available screen space
      */
@@ -63,7 +63,7 @@ fun main(args: Array<String>) {
             }
             Triangle(partsArray.sliceArray(0..2), partsArray.sliceArray(3..5))
         } catch (e: Exception) {
-            Triangle()
+            null
         }
     }
     //Sets the data input boxes to update triangles whenever changed
