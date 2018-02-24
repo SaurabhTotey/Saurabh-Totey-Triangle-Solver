@@ -22,17 +22,20 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
      * The triangle to draw; must be the unsolved triangle; this draws the solutions of this triangle
      */
     var triangle: Triangle? = null
-        //When a triangle is given to this to draw, it tries
+        //When a triangle is given to this to draw, it checks that it is valid and then draws it; otherwise, it clears the screen
         set(value) {
-            field = value
-            try {
+            if (value != null && value.isValid()) {
+                field = value
                 this.drawSolutions()
-            } catch (e: Exception) {
+            } else {
                 this.clearScreen()
                 field = null
             }
         }
 
+    /**
+     * Clears the entire area that the renderer can draw on
+     */
     private fun clearScreen() {
         this.renderer.clearRect(0.0, 0.0, this.renderer.canvas.width.toDouble(), this.renderer.canvas.height.toDouble())
     }

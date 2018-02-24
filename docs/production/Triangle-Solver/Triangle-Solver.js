@@ -681,17 +681,13 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return this.triangle_s3dj5s$_0;
     },
     set: function (value) {
-      this.triangle_s3dj5s$_0 = value;
-      try {
+      if (value != null && value.isValid()) {
+        this.triangle_s3dj5s$_0 = value;
         this.drawSolutions_0();
       }
-       catch (e) {
-        if (Kotlin.isType(e, Exception)) {
-          this.clearScreen_0();
-          this.triangle_s3dj5s$_0 = null;
-        }
-         else
-          throw e;
+       else {
+        this.clearScreen_0();
+        this.triangle_s3dj5s$_0 = null;
       }
     }
   });
