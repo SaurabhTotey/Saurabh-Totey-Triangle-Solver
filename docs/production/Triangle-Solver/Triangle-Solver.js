@@ -15,6 +15,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var substring = Kotlin.kotlin.text.substring_fc3b62$;
   var iterator = Kotlin.kotlin.text.iterator_gw00vp$;
   var contains = Kotlin.kotlin.text.contains_sgbm27$;
+  var toBoxedChar = Kotlin.toBoxedChar;
   var replace = Kotlin.kotlin.text.replace_680rmw$;
   var unboxChar = Kotlin.unboxChar;
   var math = Kotlin.kotlin.math;
@@ -26,6 +27,18 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var joinToString = Kotlin.kotlin.collections.joinToString_cgipc5$;
   var contentEquals = Kotlin.arrayEquals;
   var reversedArray = Kotlin.kotlin.collections.reversedArray_4b5429$;
+  var toList = Kotlin.kotlin.collections.toList_7wnvza$;
+  var numberToInt = Kotlin.numberToInt;
+  var until = Kotlin.kotlin.ranges.until_dqglrj$;
+  var toDouble = Kotlin.kotlin.text.toDouble_pdl1vz$;
+  var endsWith = Kotlin.kotlin.text.endsWith_7epoxm$;
+  var toString = Kotlin.toString;
+  var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
+  var indexOf = Kotlin.kotlin.text.indexOf_l5u8uk$;
+  var toChar = Kotlin.toChar;
+  var repeat = Kotlin.kotlin.text.repeat_94bcnn$;
+  var to = Kotlin.kotlin.to_ujzrz7$;
+  var hashMapOf = Kotlin.kotlin.collections.hashMapOf_qfcya0$;
   TriangleType$Part.prototype = Object.create(Enum.prototype);
   TriangleType$Part.prototype.constructor = TriangleType$Part;
   function main$fitScreen(closure$screen) {
@@ -624,7 +637,6 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return !closure$initializedSides.contains_11rb$(it);
     };
   }
-  var toBoxedChar = Kotlin.toBoxedChar;
   function TriangleType_init_0(stringType, $this) {
     $this = $this || Object.create(TriangleType.prototype);
     TriangleType.call($this);
@@ -657,22 +669,146 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   }
   function TriangleDrawer(renderer) {
     this.renderer = renderer;
+    this.aColor_0 = '#0000ff';
+    this.bColor_0 = '#ff0000';
+    this.cColor_0 = '#ff6600';
+    this.colorMap_0 = hashMapOf([to(0, this.aColor_0), to(1, this.bColor_0), to(2, this.cColor_0)]);
+    this.isRadians = true;
     this.triangle_s3dj5s$_0 = null;
-    this.renderer.save();
   }
   Object.defineProperty(TriangleDrawer.prototype, 'triangle', {
     get: function () {
       return this.triangle_s3dj5s$_0;
     },
     set: function (value) {
-      ensureNotNull(value);
-      this.renderer.restore();
       this.triangle_s3dj5s$_0 = value;
-      this.drawSolutions_0();
+      try {
+        this.drawSolutions_0();
+      }
+       catch (e) {
+        if (Kotlin.isType(e, Exception)) {
+          this.clearScreen_0();
+          this.triangle_s3dj5s$_0 = null;
+        }
+         else
+          throw e;
+      }
     }
   });
+  TriangleDrawer.prototype.clearScreen_0 = function () {
+    this.renderer.clearRect(0.0, 0.0, this.renderer.canvas.width, this.renderer.canvas.height);
+  };
+  function TriangleDrawer$drawSolutions$drawTriangle$drawLine(this$TriangleDrawer) {
+    return function (x0, y0, x1, y1) {
+      this$TriangleDrawer.renderer.beginPath();
+      this$TriangleDrawer.renderer.moveTo(x0, y0);
+      this$TriangleDrawer.renderer.lineTo(x1, y1);
+      this$TriangleDrawer.renderer.stroke();
+      this$TriangleDrawer.renderer.closePath();
+    };
+  }
+  function TriangleDrawer$drawSolutions$drawTriangle$formatString(closure$truncateLength) {
+    return function closure$formatString(toFormat) {
+      var tmp$;
+      var numLength = toFormat.toString().length;
+      var number = substring(toFormat.toString(), new IntRange(0, (numLength - 1 | 0) < (closure$truncateLength + 1 | 0) ? numLength - 1 | 0 : closure$truncateLength + 1 | 0));
+      if (endsWith(number, '0') && !endsWith(number, '.0'))
+        tmp$ = closure$formatString(toDouble(substring(number, until(0, number.length))));
+      else if (number.length >= (closure$truncateLength + 1 | 0))
+        if (number.length >= (closure$truncateLength + 2 | 0) && number.charCodeAt(closure$truncateLength + 1 | 0) !== 46 && toInt(String.fromCharCode(number.charCodeAt(closure$truncateLength + 1 | 0))) >= 5)
+          tmp$ = closure$formatString(toDouble(substring(number, until(0, closure$truncateLength)) + toString((number.charCodeAt(closure$truncateLength) | 0) + 1 | 0)));
+        else if (toFormat > toDouble(repeat('9', closure$truncateLength - 1 | 0))) {
+          var power = indexOf(number, '.') - 1 | 0;
+          var truncIndex = closure$truncateLength - power.toString().length - 1 | 0;
+          var $receiver = number.charCodeAt(0);
+          var tmp$_0 = String.fromCharCode($receiver) + '.';
+          var $receiver_0 = replace(number, '.', '');
+          var endIndex = truncIndex - 1 | 0;
+          tmp$ = tmp$_0 + $receiver_0.substring(1, endIndex) + String.fromCharCode(toBoxedChar(toChar(number.charCodeAt(truncIndex - 1 | 0) + (toInt(String.fromCharCode(number.charCodeAt(truncIndex))) >= 5 ? 1 : 0)))) + 'E' + toString(power);
+        }
+         else
+          tmp$ = substring(number, new IntRange(0, closure$truncateLength));
+      else
+        tmp$ = number + repeat(' ', closure$truncateLength + 1 - number.length | 0);
+      return tmp$;
+    };
+  }
+  function TriangleDrawer$drawSolutions$drawTriangle(this$TriangleDrawer) {
+    return function (triangleToRepresent, x, y, width, height) {
+      var tmp$, tmp$_0, tmp$_1;
+      var sides = sliceArray(triangleToRepresent.sides, new IntRange(0, 3));
+      var angles = sliceArray(triangleToRepresent.angles, new IntRange(0, 3));
+      var indices = copyToArray(toList(new IntRange(0, 2)));
+      for (var i = 2; i >= 0; i--) {
+        for (var j = 1; j <= i; j++) {
+          if (sides[j - 1 | 0] > sides[j]) {
+            var $receiver = sides[j - 1 | 0];
+            sides[j - 1 | 0] = sides[j];
+            sides[j] = $receiver;
+            var $receiver_0 = angles[j - 1 | 0];
+            angles[j - 1 | 0] = angles[j];
+            angles[j] = $receiver_0;
+            var $receiver_1 = indices[j - 1 | 0];
+            indices[j - 1 | 0] = indices[j];
+            indices[j] = $receiver_1;
+          }
+        }
+      }
+      var triangleWidth = height < width ? height : width - 10 | 0;
+      var tmp$_2 = sides[1];
+      var x_0 = angles[0];
+      var triangleHeight = numberToInt(tmp$_2 * Math_0.sin(x_0) * triangleWidth / sides[2]);
+      var leftX = x + ((width - triangleWidth | 0) / 2 | 0) | 0;
+      var rightX = leftX + triangleWidth | 0;
+      var bottomY = y + ((height - triangleHeight | 0) / 2 | 0) + triangleHeight | 0;
+      var x_1 = angles[1];
+      var meetingX = leftX + numberToInt(Math_0.cos(x_1) * sides[0] * triangleWidth / sides[2]) | 0;
+      var meetingY = bottomY - triangleHeight | 0;
+      var drawLine = TriangleDrawer$drawSolutions$drawTriangle$drawLine(this$TriangleDrawer);
+      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]);
+      drawLine(leftX, bottomY, rightX, bottomY);
+      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]);
+      drawLine(leftX, bottomY, meetingX, meetingY);
+      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[1]);
+      drawLine(rightX, bottomY, meetingX, meetingY);
+      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]);
+      drawLine(meetingX, meetingY, meetingX, meetingY);
+      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]);
+      drawLine(rightX, bottomY, rightX, bottomY);
+      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[1]);
+      drawLine(leftX, bottomY, leftX, bottomY);
+      this$TriangleDrawer.renderer.font = (triangleWidth / 35 | 0).toString() + 'px Courier New';
+      var stringParts = ['a', 'b', 'c', 'A', 'B', 'C'];
+      var truncateLength = 5;
+      var lineSpacing = (2 * triangleWidth | 0) / 35 | 0;
+      var formatString = TriangleDrawer$drawSolutions$drawTriangle$formatString(truncateLength);
+      for (var i_0 = 0; i_0 <= 2; i_0++) {
+        this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(i_0);
+        tmp$_1 = this$TriangleDrawer.renderer;
+        tmp$_0 = stringParts[i_0] + ' = ' + formatString(triangleToRepresent.sides[i_0]) + ' ' + stringParts[i_0 + 3 | 0] + ' = ';
+        if (this$TriangleDrawer.isRadians) {
+          tmp$ = formatString(triangleToRepresent.angles[i_0]);
+        }
+         else {
+          tmp$ = formatString(asDegrees(triangleToRepresent.angles[i_0]));
+        }
+        tmp$_1.strokeText(tmp$_0 + tmp$, lineSpacing / 2.0, (i_0 + 1.0) * lineSpacing);
+      }
+      this$TriangleDrawer.renderer.strokeStyle = '#000000';
+      this$TriangleDrawer.renderer.strokeText(repeat(' ', (19 - 12 | 0) / 2 | 0) + 'Area = ' + formatString(triangleToRepresent.area()), lineSpacing / 2.0, 4.0 * lineSpacing);
+    };
+  }
   TriangleDrawer.prototype.drawSolutions_0 = function () {
+    this.clearScreen_0();
     var solutions = ensureNotNull(this.triangle).solutions();
+    var drawTriangle = TriangleDrawer$drawSolutions$drawTriangle(this);
+    if (solutions.length === 2) {
+      drawTriangle(solutions[0], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop, this.renderer.canvas.width, this.renderer.canvas.height / 2 | 0);
+      drawTriangle(solutions[1], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop + (this.renderer.canvas.height / 2 | 0) | 0, this.renderer.canvas.width, this.renderer.canvas.height / 2 | 0);
+    }
+     else {
+      drawTriangle(solutions[0], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop, this.renderer.canvas.width, this.renderer.canvas.height);
+    }
   };
   TriangleDrawer.$metadata$ = {
     kind: Kind_CLASS,
