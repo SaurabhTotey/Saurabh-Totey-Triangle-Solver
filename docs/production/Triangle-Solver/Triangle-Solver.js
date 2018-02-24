@@ -4,8 +4,6 @@ if (typeof kotlin === 'undefined') {
 this['Triangle-Solver'] = function (_, Kotlin) {
   'use strict';
   var throwCCE = Kotlin.throwCCE;
-  var ensureNotNull = Kotlin.ensureNotNull;
-  var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
   var asList = Kotlin.org.w3c.dom.asList_kt9thq$;
   var IntRange = Kotlin.kotlin.ranges.IntRange;
   var equals = Kotlin.equals;
@@ -18,6 +16,8 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var toBoxedChar = Kotlin.toBoxedChar;
   var replace = Kotlin.kotlin.text.replace_680rmw$;
   var unboxChar = Kotlin.unboxChar;
+  var ensureNotNull = Kotlin.ensureNotNull;
+  var roundToInt = Kotlin.kotlin.math.roundToInt_yrwdxr$;
   var math = Kotlin.kotlin.math;
   var sum = Kotlin.kotlin.collections.sum_pnorak$;
   var min = Kotlin.kotlin.collections.min_pnorak$;
@@ -41,61 +41,49 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   var hashMapOf = Kotlin.kotlin.collections.hashMapOf_qfcya0$;
   TriangleType$Part.prototype = Object.create(Enum.prototype);
   TriangleType$Part.prototype.constructor = TriangleType$Part;
-  function main$fitScreen(closure$screen) {
-    return function () {
-      closure$screen.width = roundToInt(ensureNotNull(closure$screen.parentElement).clientWidth * 0.75);
-      closure$screen.height = roundToInt(closure$screen.width * 0.5);
-    };
-  }
-  function main$lambda(closure$fitScreen) {
-    return function (it) {
-      closure$fitScreen();
-      return null;
-    };
-  }
-  function main$lambda_0(closure$degreesBox, closure$radiansBox) {
+  function main$lambda(closure$degreesBox, closure$radiansBox) {
     return function (it) {
       closure$radiansBox.value = evaluateMath('pi * ' + closure$degreesBox.value + ' / 180').toString();
       return null;
     };
   }
-  function main$lambda_1(closure$radiansBox, closure$degreesBox) {
+  function main$lambda_0(closure$radiansBox, closure$degreesBox) {
     return function (it) {
       closure$degreesBox.value = evaluateMath('180 * ' + closure$radiansBox.value + ' / pi').toString();
       return null;
     };
   }
   var Array_0 = Array;
-  function main$updateTriangles(closure$inputBoxes, closure$componentDropdowns, closure$drawer) {
+  function main$updateTriangles(closure$inputBoxes, closure$componentDropdowns, closure$angleModeSelection, closure$drawer) {
     return function () {
-      var tmp$, tmp$_0, tmp$_1;
-      tmp$_1 = closure$drawer;
+      var tmp$, tmp$_0;
+      tmp$_0 = closure$drawer;
       try {
         var array = Array_0(6);
-        var tmp$_2;
-        tmp$_2 = array.length - 1 | 0;
-        for (var i = 0; i <= tmp$_2; i++) {
+        var tmp$_1;
+        tmp$_1 = array.length - 1 | 0;
+        for (var i = 0; i <= tmp$_1; i++) {
           array[i] = -1.0;
         }
         var partsArray = array;
         for (var i_0 = 0; i_0 <= 2; i_0++) {
           partsArray[closure$componentDropdowns.get_za3lpa$(i_0).selectedIndex] = evaluateMath(closure$inputBoxes[i_0].value);
         }
-        if (equals((Kotlin.isType(tmp$ = document.getElementById('angleMode'), HTMLSelectElement) ? tmp$ : throwCCE()).value, 'Degrees')) {
+        if (equals(closure$angleModeSelection.value, 'Degrees')) {
           for (var i_1 = 3; i_1 <= 5; i_1++) {
             partsArray[i_1] = asRadians(partsArray[i_1]);
           }
         }
-        tmp$_0 = new Triangle(sliceArray(partsArray, new IntRange(0, 2)), sliceArray(partsArray, new IntRange(3, 5)));
+        tmp$ = new Triangle(sliceArray(partsArray, new IntRange(0, 2)), sliceArray(partsArray, new IntRange(3, 5)));
       }
        catch (e) {
         if (Kotlin.isType(e, Exception)) {
-          tmp$_0 = null;
+          tmp$ = null;
         }
          else
           throw e;
       }
-      tmp$_1.triangle = tmp$_0;
+      tmp$_0.triangle = tmp$;
     };
   }
   function main$lambda$lambda(closure$updateTriangles) {
@@ -124,7 +112,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return null;
     };
   }
-  function main$lambda_2(closure$typeIO, closure$componentDropdowns, closure$updateTriangles) {
+  function main$lambda_1(closure$typeIO, closure$componentDropdowns, closure$updateTriangles) {
     return function (it) {
       var tmp$, tmp$_0, tmp$_1;
       if (closure$typeIO.value.length > 3) {
@@ -156,58 +144,76 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       return null;
     };
   }
+  function main$lambda_2(closure$angleModeSelection, closure$drawer, closure$updateTriangles) {
+    return function (it) {
+      closure$drawer.isRadians = equals(closure$angleModeSelection.value, 'Radians');
+      closure$updateTriangles();
+      return null;
+    };
+  }
+  function main$fitScreen(closure$screen) {
+    return function () {
+      closure$screen.width = roundToInt(ensureNotNull(closure$screen.parentElement).clientWidth * 0.75);
+      closure$screen.height = roundToInt(closure$screen.width * 0.5);
+    };
+  }
+  function main$lambda_3(closure$fitScreen, closure$updateTriangles) {
+    return function (it) {
+      closure$fitScreen();
+      closure$updateTriangles();
+      return null;
+    };
+  }
   var collectionSizeOrDefault = Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$;
   var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
   var copyToArray = Kotlin.kotlin.collections.copyToArray;
   function main(args) {
-    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3;
+    var tmp$, tmp$_0, tmp$_1, tmp$_2, tmp$_3, tmp$_4;
     var screen = Kotlin.isType(tmp$ = document.getElementById('screen'), HTMLCanvasElement) ? tmp$ : throwCCE();
     var drawer = new TriangleDrawer(Kotlin.isType(tmp$_0 = screen.getContext('2d'), CanvasRenderingContext2D) ? tmp$_0 : throwCCE());
-    var fitScreen = main$fitScreen(screen);
-    window.onresize = main$lambda(fitScreen);
-    fitScreen();
     var degreesBox = Kotlin.isType(tmp$_1 = document.getElementById('degreesBox'), HTMLInputElement) ? tmp$_1 : throwCCE();
     var radiansBox = Kotlin.isType(tmp$_2 = document.getElementById('radiansBox'), HTMLInputElement) ? tmp$_2 : throwCCE();
-    degreesBox.oninput = main$lambda_0(degreesBox, radiansBox);
-    radiansBox.oninput = main$lambda_1(radiansBox, degreesBox);
+    degreesBox.oninput = main$lambda(degreesBox, radiansBox);
+    radiansBox.oninput = main$lambda_0(radiansBox, degreesBox);
     var stringParts = ['a', 'b', 'c', 'A', 'B', 'C'];
     var typeIO = Kotlin.isType(tmp$_3 = document.getElementById('triangleType'), HTMLInputElement) ? tmp$_3 : throwCCE();
     var $receiver = asList(document.getElementsByClassName('componentSelect'));
     var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
-    var tmp$_4;
-    tmp$_4 = $receiver.iterator();
-    while (tmp$_4.hasNext()) {
-      var item = tmp$_4.next();
-      var tmp$_5;
-      destination.add_11rb$(Kotlin.isType(tmp$_5 = item, HTMLSelectElement) ? tmp$_5 : throwCCE());
+    var tmp$_5;
+    tmp$_5 = $receiver.iterator();
+    while (tmp$_5.hasNext()) {
+      var item = tmp$_5.next();
+      var tmp$_6;
+      destination.add_11rb$(Kotlin.isType(tmp$_6 = item, HTMLSelectElement) ? tmp$_6 : throwCCE());
     }
     var componentDropdowns = destination;
+    var angleModeSelection = Kotlin.isType(tmp$_4 = document.getElementById('angleMode'), HTMLSelectElement) ? tmp$_4 : throwCCE();
     var $receiver_0 = new IntRange(0, 2);
     var destination_0 = ArrayList_init(collectionSizeOrDefault($receiver_0, 10));
-    var tmp$_6;
-    tmp$_6 = $receiver_0.iterator();
-    while (tmp$_6.hasNext()) {
-      var item_0 = tmp$_6.next();
-      var tmp$_7;
-      destination_0.add_11rb$(Kotlin.isType(tmp$_7 = document.getElementById('input' + item_0), HTMLInputElement) ? tmp$_7 : throwCCE());
+    var tmp$_7;
+    tmp$_7 = $receiver_0.iterator();
+    while (tmp$_7.hasNext()) {
+      var item_0 = tmp$_7.next();
+      var tmp$_8;
+      destination_0.add_11rb$(Kotlin.isType(tmp$_8 = document.getElementById('input' + item_0), HTMLInputElement) ? tmp$_8 : throwCCE());
     }
     var inputBoxes = copyToArray(destination_0);
-    var updateTriangles = main$updateTriangles(inputBoxes, componentDropdowns, drawer);
-    var tmp$_8;
-    for (tmp$_8 = 0; tmp$_8 !== inputBoxes.length; ++tmp$_8) {
-      var element = inputBoxes[tmp$_8];
+    var updateTriangles = main$updateTriangles(inputBoxes, componentDropdowns, angleModeSelection, drawer);
+    var tmp$_9;
+    for (tmp$_9 = 0; tmp$_9 !== inputBoxes.length; ++tmp$_9) {
+      var element = inputBoxes[tmp$_9];
       element.oninput = main$lambda$lambda(updateTriangles);
     }
-    var tmp$_9, tmp$_0_0;
+    var tmp$_10, tmp$_0_0;
     var index = 0;
-    tmp$_9 = componentDropdowns.iterator();
-    while (tmp$_9.hasNext()) {
-      var item_1 = tmp$_9.next();
+    tmp$_10 = componentDropdowns.iterator();
+    while (tmp$_10.hasNext()) {
+      var item_1 = tmp$_10.next();
       var index_0 = (tmp$_0_0 = index, index = tmp$_0_0 + 1 | 0, tmp$_0_0);
-      var tmp$_10, tmp$_11;
-      for (tmp$_10 = 0; tmp$_10 !== stringParts.length; ++tmp$_10) {
-        var letter = stringParts[tmp$_10];
-        var option = Kotlin.isType(tmp$_11 = document.createElement('OPTION'), HTMLOptionElement) ? tmp$_11 : throwCCE();
+      var tmp$_11, tmp$_12;
+      for (tmp$_11 = 0; tmp$_11 !== stringParts.length; ++tmp$_11) {
+        var letter = stringParts[tmp$_11];
+        var option = Kotlin.isType(tmp$_12 = document.createElement('OPTION'), HTMLOptionElement) ? tmp$_12 : throwCCE();
         option.value = letter;
         option.text = letter;
         item_1.add(option);
@@ -216,7 +222,11 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       item_1.oninput = main$lambda$lambda_0(componentDropdowns, typeIO, updateTriangles);
     }
     typeIO.value = 'SSS';
-    typeIO.oninput = main$lambda_2(typeIO, componentDropdowns, updateTriangles);
+    typeIO.oninput = main$lambda_1(typeIO, componentDropdowns, updateTriangles);
+    angleModeSelection.oninput = main$lambda_2(angleModeSelection, drawer, updateTriangles);
+    var fitScreen = main$fitScreen(screen);
+    window.onresize = main$lambda_3(fitScreen, updateTriangles);
+    fitScreen();
   }
   function hasBeenInitialized$lambda(a) {
     return a > 0;
@@ -704,10 +714,14 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     };
   }
   function TriangleDrawer$drawSolutions$drawTriangle$formatString(closure$truncateLength) {
+    var Math_0 = Math;
     return function closure$formatString(toFormat) {
       var tmp$;
       var numLength = toFormat.toString().length;
-      var number = substring(toFormat.toString(), new IntRange(0, (numLength - 1 | 0) < (closure$truncateLength + 1 | 0) ? numLength - 1 | 0 : closure$truncateLength + 1 | 0));
+      var tmp$_0 = toFormat.toString();
+      var a = numLength - 1 | 0;
+      var b = closure$truncateLength + 1 | 0;
+      var number = substring(tmp$_0, new IntRange(0, Math_0.max(a, b)));
       if (endsWith(number, '0') && !endsWith(number, '.0'))
         tmp$ = closure$formatString(toDouble(substring(number, until(0, number.length))));
       else if (number.length >= (closure$truncateLength + 1 | 0))
@@ -717,10 +731,10 @@ this['Triangle-Solver'] = function (_, Kotlin) {
           var power = indexOf(number, '.') - 1 | 0;
           var truncIndex = closure$truncateLength - power.toString().length - 1 | 0;
           var $receiver = number.charCodeAt(0);
-          var tmp$_0 = String.fromCharCode($receiver) + '.';
+          var tmp$_1 = String.fromCharCode($receiver) + '.';
           var $receiver_0 = replace(number, '.', '');
           var endIndex = truncIndex - 1 | 0;
-          tmp$ = tmp$_0 + $receiver_0.substring(1, endIndex) + String.fromCharCode(toBoxedChar(toChar(number.charCodeAt(truncIndex - 1 | 0) + (toInt(String.fromCharCode(number.charCodeAt(truncIndex))) >= 5 ? 1 : 0)))) + 'E' + toString(power);
+          tmp$ = tmp$_1 + $receiver_0.substring(1, endIndex) + String.fromCharCode(toBoxedChar(toChar(number.charCodeAt(truncIndex - 1 | 0) + (toInt(String.fromCharCode(number.charCodeAt(truncIndex))) >= 5 ? 1 : 0)))) + 'E' + toString(power);
         }
          else
           tmp$ = substring(number, new IntRange(0, closure$truncateLength));
@@ -783,12 +797,12 @@ this['Triangle-Solver'] = function (_, Kotlin) {
         tmp$_1 = this$TriangleDrawer.renderer;
         tmp$_0 = stringParts[i_0] + ' = ' + formatString(triangleToRepresent.sides[i_0]) + ' ' + stringParts[i_0 + 3 | 0] + ' = ';
         if (this$TriangleDrawer.isRadians) {
-          tmp$ = formatString(triangleToRepresent.angles[i_0]);
+          tmp$ = triangleToRepresent.angles[i_0];
         }
          else {
-          tmp$ = formatString(asDegrees(triangleToRepresent.angles[i_0]));
+          tmp$ = asDegrees(triangleToRepresent.angles[i_0]);
         }
-        tmp$_1.strokeText(tmp$_0 + tmp$, x + lineSpacing / 2.0, y + (i_0 + 1.0) * lineSpacing);
+        tmp$_1.strokeText(tmp$_0 + formatString(tmp$), x + lineSpacing / 2.0, y + (i_0 + 1.0) * lineSpacing);
       }
       this$TriangleDrawer.renderer.strokeStyle = '#000000';
       this$TriangleDrawer.renderer.strokeText(repeat(' ', (19 - 12 | 0) / 2 | 0) + 'Area = ' + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing);

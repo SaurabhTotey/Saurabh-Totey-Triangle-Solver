@@ -1,7 +1,9 @@
 package com.saurabhtotey.trianglesolver
 
 import org.w3c.dom.CanvasRenderingContext2D
-import kotlin.math.*
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.sin
 
 /**
  * A class that handles drawing triangles; takes in the rendering context with which to draw the said triangles
@@ -97,7 +99,7 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
             val lineSpacing = 2 * triangleWidth / 35
             fun formatString(toFormat: Double): String {
                 val numLength = toFormat.toString().length
-                val number: String = toFormat.toString().substring(0..if (numLength - 1 < truncateLength + 1) numLength - 1 else truncateLength + 1)
+                val number = toFormat.toString().substring(0..max(numLength - 1, truncateLength + 1))
                 return when {
                     number.endsWith("0") && !number.endsWith(".0") -> formatString(number.substring(0 until number.length).toDouble())
                     number.length >= truncateLength + 1 -> {
@@ -119,11 +121,11 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
             }
             for (i in 0..2) {
                 this.renderer.strokeStyle = colorMap[i]
-                this.renderer.strokeText(stringParts[i] + " = " + formatString(triangleToRepresent.sides[i]) + " " + stringParts[i + 3] + " = " + if (isRadians) {
-                    formatString(triangleToRepresent.angles[i])
+                this.renderer.strokeText(stringParts[i] + " = " + formatString(triangleToRepresent.sides[i]) + " " + stringParts[i + 3] + " = " + formatString(if (isRadians) {
+                    triangleToRepresent.angles[i]
                 } else {
-                    formatString(asDegrees(triangleToRepresent.angles[i]))
-                }, x + lineSpacing / 2.0, y + (i + 1.0) * lineSpacing)
+                    asDegrees(triangleToRepresent.angles[i])
+                }), x + lineSpacing / 2.0, y + (i + 1.0) * lineSpacing)
             }
             this.renderer.strokeStyle = "#000000"
             this.renderer.strokeText(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces

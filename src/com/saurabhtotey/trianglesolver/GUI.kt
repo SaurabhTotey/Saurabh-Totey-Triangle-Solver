@@ -19,17 +19,6 @@ fun main(args: Array<String>) {
     val screen = document.getElementById("screen") as HTMLCanvasElement
     ///The utility object which draws to the screen
     val drawer = TriangleDrawer(screen.getContext("2d") as CanvasRenderingContext2D)
-    /**
-     * Defines a method to fit the rendering area to the available screen space
-     */
-    fun fitScreen() {
-        screen.width = (screen.parentElement!!.clientWidth * 0.75).roundToInt()
-        screen.height = (screen.width * 0.5).roundToInt()
-    }
-    //Sets the window to always resize/fit screen when window size changes
-    window.onresize = { fitScreen(); null }
-    //Fits the screen when the program enters
-    fitScreen()
     //Finds the degrees and radians conversion boxes and sets them to update the other box with the equivalent number
     val degreesBox = document.getElementById("degreesBox") as HTMLInputElement
     val radiansBox = document.getElementById("radiansBox") as HTMLInputElement
@@ -45,9 +34,12 @@ fun main(args: Array<String>) {
     val stringParts = arrayOf("a", "b", "c", "A", "B", "C")
     val typeIO = document.getElementById("triangleType") as HTMLInputElement
     val componentDropdowns = document.getElementsByClassName("componentSelect").asList().map { it as HTMLSelectElement }
+    val angleModeSelection = document.getElementById("angleMode") as HTMLSelectElement
     //Makes the input boxes where the user enters their triangle data
     val inputBoxes = (0..2).map { document.getElementById("input$it") as HTMLInputElement }.toTypedArray()
-    //Defines a function that reads all input data and gives it to the triangle drawer
+    /**
+     * Defines a function that reads all input data and gives it to the triangle drawer
+     */
     fun updateTriangles() {
         drawer.triangle = try {
             //Reads triangle info
@@ -56,7 +48,7 @@ fun main(args: Array<String>) {
                 partsArray[componentDropdowns[i].selectedIndex] = evaluate(inputBoxes[i].value)
             }
             //Updates angles to be in radians if they were inputted as degrees
-            if ((document.getElementById("angleMode") as HTMLSelectElement).value == "Degrees") {
+            if (angleModeSelection.value == "Degrees") {
                 for (i in 3..5) {
                     partsArray[i] = asRadians(partsArray[i])
                 }
@@ -123,5 +115,25 @@ fun main(args: Array<String>) {
         null
     }
     //Sets the angle selection dropdown to update the triangle drawer
-    //TODO: do above
+    angleModeSelection.oninput = {
+        //Whether the drawer is assuming radians is based on what option of the angle mode is selected
+        drawer.isRadians = angleModeSelection.value == "Radians"
+        updateTriangles()
+        null
+    }
+    /**
+     * Defines a method to fit the rendering area to the available screen space
+     */
+    fun fitScreen() {
+        screen.width = (screen.parentElement!!.clientWidth * 0.75).roundToInt()
+        screen.height = (screen.width * 0.5).roundToInt()
+    }
+    //Sets the window to always resize/fit screen when window size changes
+    window.onresize = {
+        fitScreen()
+        updateTriangles()
+        null
+    }
+    //Fits the screen when the program enters
+    fitScreen()
 }
