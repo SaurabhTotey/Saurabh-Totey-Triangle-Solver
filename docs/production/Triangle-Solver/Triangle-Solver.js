@@ -775,6 +775,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       var meetingX = leftX + numberToInt(Math_0.cos(x_1) * sides[0] * triangleWidth / sides[2]) | 0;
       var meetingY = bottomY - triangleHeight | 0;
       var drawLine = TriangleDrawer$drawSolutions$drawTriangle$drawLine(this$TriangleDrawer);
+      this$TriangleDrawer.renderer.lineWidth = triangleWidth / 200.0;
       this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]);
       drawLine(leftX, bottomY, rightX, bottomY);
       this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]);
@@ -793,7 +794,7 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       var lineSpacing = (2 * triangleWidth | 0) / 35 | 0;
       var formatString = TriangleDrawer$drawSolutions$drawTriangle$formatString(truncateLength);
       for (var i_0 = 0; i_0 <= 2; i_0++) {
-        this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(i_0);
+        this$TriangleDrawer.renderer.fillStyle = this$TriangleDrawer.colorMap_0.get_11rb$(i_0);
         tmp$_1 = this$TriangleDrawer.renderer;
         tmp$_0 = stringParts[i_0] + ' = ' + formatString(triangleToRepresent.sides[i_0]) + ' ' + stringParts[i_0 + 3 | 0] + ' = ';
         if (this$TriangleDrawer.isRadians) {
@@ -802,10 +803,10 @@ this['Triangle-Solver'] = function (_, Kotlin) {
          else {
           tmp$ = asDegrees(triangleToRepresent.angles[i_0]);
         }
-        tmp$_1.strokeText(tmp$_0 + formatString(tmp$), x + lineSpacing / 2.0, y + (i_0 + 1.0) * lineSpacing);
+        tmp$_1.fillText(tmp$_0 + formatString(tmp$), x + lineSpacing / 2.0, y + (i_0 + 1.0) * lineSpacing);
       }
-      this$TriangleDrawer.renderer.strokeStyle = '#000000';
-      this$TriangleDrawer.renderer.strokeText(repeat(' ', (19 - 12 | 0) / 2 | 0) + 'Area = ' + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing);
+      this$TriangleDrawer.renderer.fillStyle = '#000000';
+      this$TriangleDrawer.renderer.fillText(repeat(' ', (19 - 12 | 0) / 2 | 0) + 'Area = ' + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing);
     };
   }
   TriangleDrawer.prototype.drawSolutions_0 = function () {

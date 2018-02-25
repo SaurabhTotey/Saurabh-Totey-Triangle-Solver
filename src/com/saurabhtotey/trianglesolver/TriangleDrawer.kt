@@ -79,13 +79,15 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
                 this.renderer.stroke()
                 this.renderer.closePath()
             }
+            //Sets the line thickness
+            this.renderer.lineWidth = triangleWidth / 200.0
             this.renderer.strokeStyle = colorMap[indices[2]]
             drawLine(leftX, bottomY, rightX, bottomY) //Largest side is always horizontally oriented at the bottom
             this.renderer.strokeStyle = colorMap[indices[0]]
             drawLine(leftX, bottomY, meetingX, meetingY) //Smallest side is always the left leg of the triangle
             this.renderer.strokeStyle = colorMap[indices[1]]
             drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
-            //Draws all the dots of the triangle and corresponds the colors of the dots with the opposite side's color
+            //Draws all the dots of the triangle and corresponds the colors of the dots with the opposite side's color TODO: apparently doesn't work
             this.renderer.strokeStyle = colorMap[indices[2]]
             drawLine(meetingX, meetingY, meetingX, meetingY) //Draws the dot at the top with the same color as the largest side
             this.renderer.strokeStyle = colorMap[indices[0]]
@@ -120,15 +122,15 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
                 }
             }
             for (i in 0..2) {
-                this.renderer.strokeStyle = colorMap[i]
-                this.renderer.strokeText(stringParts[i] + " = " + formatString(triangleToRepresent.sides[i]) + " " + stringParts[i + 3] + " = " + formatString(if (isRadians) {
+                this.renderer.fillStyle = colorMap[i]
+                this.renderer.fillText(stringParts[i] + " = " + formatString(triangleToRepresent.sides[i]) + " " + stringParts[i + 3] + " = " + formatString(if (isRadians) {
                     triangleToRepresent.angles[i]
                 } else {
                     asDegrees(triangleToRepresent.angles[i])
                 }), x + lineSpacing / 2.0, y + (i + 1.0) * lineSpacing)
             }
-            this.renderer.strokeStyle = "#000000"
-            this.renderer.strokeText(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces
+            this.renderer.fillStyle = "#000000"
+            this.renderer.fillText(" ".repeat((19 - 12) / 2) + "Area = " + formatString(triangleToRepresent.area()), x + lineSpacing / 2.0, y + 4.0 * lineSpacing) //19 is the length of the above strings, 12 is the length of this string without the preceding spaces
         }
         if (solutions.size == 2) {
             drawTriangle(solutions[0], this.renderer.canvas.clientLeft, this.renderer.canvas.clientTop, this.renderer.canvas.width, this.renderer.canvas.height / 2)
