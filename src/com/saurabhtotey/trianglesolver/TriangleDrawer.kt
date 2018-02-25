@@ -1,6 +1,7 @@
 package com.saurabhtotey.trianglesolver
 
 import org.w3c.dom.CanvasRenderingContext2D
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -13,9 +14,9 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
     /**
      * The color pallete of the colors to be used for drawing the triangle
      */
-    private val aColor = "#0000ff"
-    private val bColor = "#ff0000"
-    private val cColor = "#ff6600"
+    private val aColor = "blue"
+    private val bColor = "red"
+    private val cColor = "orange"
     //Sets each index to a color
     private val colorMap = hashMapOf(0 to aColor, 1 to bColor, 2 to cColor)
     var isRadians = true
@@ -71,29 +72,31 @@ class TriangleDrawer(val renderer: CanvasRenderingContext2D) {
             val bottomY = y + (height - triangleHeight) / 2 + triangleHeight
             val meetingX = leftX + (cos(angles[1]) * sides[0] * triangleWidth / sides[2]).toInt()
             val meetingY = bottomY - triangleHeight
+            //Sets the line thickness
+            this.renderer.lineWidth = triangleWidth / 200.0
             //Actually draws the triangle
-            fun drawLine(x0: Int, y0: Int, x1: Int, y1: Int) {
+            fun drawLine(color: String?, x0: Int, y0: Int, x1: Int, y1: Int) {
+                this.renderer.strokeStyle = color
                 this.renderer.beginPath()
                 this.renderer.moveTo(x0.toDouble(), y0.toDouble())
                 this.renderer.lineTo(x1.toDouble(), y1.toDouble())
                 this.renderer.stroke()
                 this.renderer.closePath()
             }
-            //Sets the line thickness
-            this.renderer.lineWidth = triangleWidth / 200.0
-            this.renderer.strokeStyle = colorMap[indices[2]]
-            drawLine(leftX, bottomY, rightX, bottomY) //Largest side is always horizontally oriented at the bottom
-            this.renderer.strokeStyle = colorMap[indices[0]]
-            drawLine(leftX, bottomY, meetingX, meetingY) //Smallest side is always the left leg of the triangle
-            this.renderer.strokeStyle = colorMap[indices[1]]
-            drawLine(rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
-            //Draws all the dots of the triangle and corresponds the colors of the dots with the opposite side's color TODO: apparently doesn't work
-            this.renderer.strokeStyle = colorMap[indices[2]]
-            drawLine(meetingX, meetingY, meetingX, meetingY) //Draws the dot at the top with the same color as the largest side
-            this.renderer.strokeStyle = colorMap[indices[0]]
-            drawLine(rightX, bottomY, rightX, bottomY) //Draws the dot at the right with the same color as the left leg
-            this.renderer.strokeStyle = colorMap[indices[1]]
-            drawLine(leftX, bottomY, leftX, bottomY) //Draws the dot at the left with the same color as the right leg
+            drawLine(colorMap[indices[2]], leftX, bottomY, rightX, bottomY) //Largest side is always horizontally oriented at the bottom
+            drawLine(colorMap[indices[0]], leftX, bottomY, meetingX, meetingY) //Smallest side is always the left leg of the triangle
+            drawLine(colorMap[indices[1]], rightX, bottomY, meetingX, meetingY) //Medium side is always the right leg of the triangle
+            //Draws all the dots of the triangle and corresponds the colors of the dots with the opposite side's color
+            fun drawDot(color: String?, x0: Int, y0: Int) {
+                this.renderer.fillStyle = color
+                this.renderer.beginPath()
+                this.renderer.arc(x0.toDouble(), y0.toDouble(), this.renderer.lineWidth, 0.0, 2 * PI)
+                this.renderer.fill()
+                this.renderer.closePath()
+            }
+            drawDot(colorMap[indices[2]], meetingX, meetingY) //Draws the dot at the top with the same color as the largest side
+            drawDot(colorMap[indices[0]], rightX, bottomY) //Draws the dot at the right with the same color as the left leg
+            drawDot(colorMap[indices[1]], leftX, bottomY) //Draws the dot at the left with the same color as the right leg
             //Below draws text that displays triangle information
             this.renderer.font = "${triangleWidth / 35}px Courier New"
             val stringParts = arrayOf("a", "b", "c", "A", "B", "C")

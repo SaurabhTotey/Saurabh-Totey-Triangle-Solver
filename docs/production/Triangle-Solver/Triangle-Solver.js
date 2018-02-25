@@ -679,9 +679,9 @@ this['Triangle-Solver'] = function (_, Kotlin) {
   }
   function TriangleDrawer(renderer) {
     this.renderer = renderer;
-    this.aColor_0 = '#0000ff';
-    this.bColor_0 = '#ff0000';
-    this.cColor_0 = '#ff6600';
+    this.aColor_0 = 'blue';
+    this.bColor_0 = 'red';
+    this.cColor_0 = 'orange';
     this.colorMap_0 = hashMapOf([to(0, this.aColor_0), to(1, this.bColor_0), to(2, this.cColor_0)]);
     this.isRadians = true;
     this.triangle_s3dj5s$_0 = null;
@@ -705,11 +705,21 @@ this['Triangle-Solver'] = function (_, Kotlin) {
     this.renderer.clearRect(0.0, 0.0, this.renderer.canvas.width, this.renderer.canvas.height);
   };
   function TriangleDrawer$drawSolutions$drawTriangle$drawLine(this$TriangleDrawer) {
-    return function (x0, y0, x1, y1) {
+    return function (color, x0, y0, x1, y1) {
+      this$TriangleDrawer.renderer.strokeStyle = color;
       this$TriangleDrawer.renderer.beginPath();
       this$TriangleDrawer.renderer.moveTo(x0, y0);
       this$TriangleDrawer.renderer.lineTo(x1, y1);
       this$TriangleDrawer.renderer.stroke();
+      this$TriangleDrawer.renderer.closePath();
+    };
+  }
+  function TriangleDrawer$drawSolutions$drawTriangle$drawDot(this$TriangleDrawer) {
+    return function (color, x0, y0) {
+      this$TriangleDrawer.renderer.fillStyle = color;
+      this$TriangleDrawer.renderer.beginPath();
+      this$TriangleDrawer.renderer.arc(x0, y0, this$TriangleDrawer.renderer.lineWidth, 0.0, 2 * math.PI);
+      this$TriangleDrawer.renderer.fill();
       this$TriangleDrawer.renderer.closePath();
     };
   }
@@ -774,20 +784,15 @@ this['Triangle-Solver'] = function (_, Kotlin) {
       var x_1 = angles[1];
       var meetingX = leftX + numberToInt(Math_0.cos(x_1) * sides[0] * triangleWidth / sides[2]) | 0;
       var meetingY = bottomY - triangleHeight | 0;
-      var drawLine = TriangleDrawer$drawSolutions$drawTriangle$drawLine(this$TriangleDrawer);
       this$TriangleDrawer.renderer.lineWidth = triangleWidth / 200.0;
-      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]);
-      drawLine(leftX, bottomY, rightX, bottomY);
-      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]);
-      drawLine(leftX, bottomY, meetingX, meetingY);
-      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[1]);
-      drawLine(rightX, bottomY, meetingX, meetingY);
-      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]);
-      drawLine(meetingX, meetingY, meetingX, meetingY);
-      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]);
-      drawLine(rightX, bottomY, rightX, bottomY);
-      this$TriangleDrawer.renderer.strokeStyle = this$TriangleDrawer.colorMap_0.get_11rb$(indices[1]);
-      drawLine(leftX, bottomY, leftX, bottomY);
+      var drawLine = TriangleDrawer$drawSolutions$drawTriangle$drawLine(this$TriangleDrawer);
+      drawLine(this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]), leftX, bottomY, rightX, bottomY);
+      drawLine(this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]), leftX, bottomY, meetingX, meetingY);
+      drawLine(this$TriangleDrawer.colorMap_0.get_11rb$(indices[1]), rightX, bottomY, meetingX, meetingY);
+      var drawDot = TriangleDrawer$drawSolutions$drawTriangle$drawDot(this$TriangleDrawer);
+      drawDot(this$TriangleDrawer.colorMap_0.get_11rb$(indices[2]), meetingX, meetingY);
+      drawDot(this$TriangleDrawer.colorMap_0.get_11rb$(indices[0]), rightX, bottomY);
+      drawDot(this$TriangleDrawer.colorMap_0.get_11rb$(indices[1]), leftX, bottomY);
       this$TriangleDrawer.renderer.font = (triangleWidth / 35 | 0).toString() + 'px Courier New';
       var stringParts = ['a', 'b', 'c', 'A', 'B', 'C'];
       var truncateLength = 5;
