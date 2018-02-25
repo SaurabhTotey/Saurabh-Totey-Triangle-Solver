@@ -1,4 +1,4 @@
-# **Triangle Solver**
+# **[Triangle Solver](https://saurabhtotey.github.io/Triangle-Solver/)**
 Made by Saurabh Totey\
 ![alt text](docs/LabelledTS.png "")
 1. **Angle-Mode Selection**
